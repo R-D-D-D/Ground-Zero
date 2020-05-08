@@ -1,0 +1,27 @@
+vtemplate#v-login
+  input(v-model="admin_pass" placeholder="enter pass")
+  button(v-on:click="$emit('admin_login')") Enter admin pass
+
+script.
+  comps.load("v-login")
+  comps.update('v-login', {
+    data() {
+      return {
+        admin_pass: ''
+      };
+    },
+    computed: Vuex.mapState(['email, tkn, logged_in, albums']),
+    created() {
+      this.$on('admin_login', (pass) => {
+        if (this.admin_pass.localeCompare("rd") == 0) {
+          store.dispatch('adminLogin')
+          alert('Log in success')
+          this.admin_pass = ''
+        } else {
+          alert('Don\'t pretend to be the admin hor')
+          this.admin_pass = ''
+          return
+        }
+      });
+    }
+  })

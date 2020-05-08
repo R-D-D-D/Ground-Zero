@@ -1,0 +1,42 @@
+vtemplate#v-list
+  .container-fluid.home-bg
+    .row.mb-5
+      .col
+        nav#home-nav.navbar.navbar-expand-lg.navbar-dark
+          a#logo(href='#') MUSIC ACADEMY
+            button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+              span.navbar-toggler-icon
+            #navbarSupportedContent.collapse.navbar-collapse
+              ul.navbar-nav.ml-auto
+                li.nav-item.active
+                  //- router-link.nav-link.text-light(to="/") Home
+                  a.nav-link.text-light(href='#') Home
+                li.nav-item
+                  a.nav-link.text-light(href='#') About
+    .home-text.row
+      .col.offset-md-1.mt-4
+        h3.text-light.text-left.mb-2(style='margin-top:1%;')
+          | Choose
+        h1.text-light.text-left
+          | The Music Academy
+    .row.justify-content-around
+      .col-6.mt-4.text-center
+        router-link.btn.btn-outline-light.btn-lg(to="/student") Use as Student
+      .col-6.mt-4.text-center
+        a.btn.btn-outline-light.btn-lg(href="https://google.com") Use as Tutor
+
+script.
+  comps.load("v-list")
+  comps.update('v-list', {
+    //- data() {
+    //-   return {
+    //-     update_finished: false
+    //-   };
+    //- },
+    //- computed: {
+    //-   list() {
+    //-     return store.getters.albums
+    //-   }
+    //- }
+  })
+  Vue.component('list', comps['v-list'])

@@ -1,0 +1,32 @@
+html
+  head
+    link(href="webfonts/fa.min.css", rel="stylesheet")
+
+    link(href="style.css", rel="stylesheet")
+
+    script(src="https://unpkg.com/vue/dist/vue.js")
+    script(src="https://unpkg.com/vuex/dist/vuex.min.js")
+    script(src="https://unpkg.com/vue-router/dist/vue-router.min.js")
+
+    script(src="util.js")
+    script(src="api.js")
+    script(src="store.js")
+
+    link(href="style.css", rel="stylesheet")
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+
+  body
+    #app
+      //- router-link(to="/") Home
+      //- router-link(to="/login") Log In
+    
+      //- h2(v-if="logged_in") Logged in
+      //- h2(v-else) Please login first
+      router-view
+    
+    include login
+    include albums
+    include student
+
+    script(src="app.js")
+

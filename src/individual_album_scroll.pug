@@ -1,0 +1,55 @@
+//- vtemplate#v-show
+//-   #album__scroll
+//-     a(href="#")
+//-       .back__btn
+//-         .back__btn__icon <
+//-         .back__btn__text back
+//-     #album__scroll__title(v-if="album") {{ album.info.name.toUpperCase() }}
+//-     #album__scroll__description Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium cumque deleniti sit, nam placeat velit! Ab eos officia, esse harum alias sint odio in doloremque nostrum ipsa porro voluptatum quo!
+//-     #album__scroll__btns__row
+//-       router-link(v-if="album" v-bind:to="{ name: 'new_photo', params: { id: album.info.id } }")
+//-         .dideas__btn
+//-           .dideas__btn__text Add photos
+//-           .dideas__btn__icon +
+//-       .btn__grp
+//-         .btn__left
+//-           a(href="#")
+//-             i.fa.fa-bars
+//-         .btn__right
+//-           a(href="#")
+//-             i.fa.fa-th
+//-     #album__scroll__btns__row
+//-       a(href="#", v-on:click.stop="$emit('delete_album')")
+//-         .dideas__btn
+//-           .dideas__btn__text Delete album
+//-           .dideas__btn__fa__icon
+//-             i.fa.fa-times
+//-       router-link(v-if="album" v-bind:to="{ name: 'update', params: { id: album.info.id } }")
+//-         .dideas__btn
+//-           .dideas__btn__text Update album
+//-           .dideas__btn__fa__icon
+//-             i.fa.fa-pen
+//-     div(v-if="album")
+//-       #album__scroll__category(v-for="category in album.categories")
+//-         h2.name {{ category.category }}
+//-         .img(v-for="photo in category.photos")
+//-           .img__content
+//-             img.img__img(v-bind:src="photo.url")
+
+//- script.
+//-   comps.load("v-show")
+//-   comps.update('v-show', {
+//-     created() {
+//-       this.$on('delete_album', () => {
+//-         if (confirm(`Are you sure you want to delete the ${this.album.info.name.toUpperCase()} album?`)) {
+//-           store.dispatch('deleteAlbum', this.album.info.id)
+//-         }
+//-       });
+//-     },
+//-     computed: {
+//-       album() {
+//-         return store.getters.album(this.$route.params.id)
+//-       }
+//-     }
+//-   })
+//-   Vue.component('show', comps['v-show'])

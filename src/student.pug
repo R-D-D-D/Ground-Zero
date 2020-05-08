@@ -1,0 +1,57 @@
+vtemplate#v-student
+  .container-fluid.home-student-bg
+      .row.mb-5
+        .col
+          nav#home-nav.navbar.navbar-expand-lg.navbar-dark
+            a#logo(href='#') MUSIC ACADEMY
+              button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+              #navbarSupportedContent.collapse.navbar-collapse
+                ul.navbar-nav.ml-auto
+                  li.nav-item.active
+                    a.nav-link.text-light(href='#') Home
+                  li.nav-item
+                    a.nav-link.text-light(href='#') About
+      .row.mt-5.mb-5.justify-content-center
+        .col-3
+          button.btn.btn-outline-light.btn-lg(v-on:click="$emit('generate_random')") Get random sequence
+      .row.mt-5
+        .col-2
+          .p
+        .col-2
+          .p.border.square.text-center
+            img.p-2(v-bind:src="box_one_img")
+        .col-2
+          .p.border.square.text-center
+            img.p-2(v-bind:src="box_two_img")
+        .col-2
+          .p.border.square.text-center
+            img.p-2(v-bind:src="box_three_img")
+        .col-2
+          .p.border.square.text-center
+            img.p-2(v-bind:src="box_four_img")
+        .col-2
+          .p
+
+script.
+  comps.load("v-student")
+  comps.update('v-student', {
+    data() {
+      return {
+        admin_pass: '',
+        box_one_img: 'resources/dark_bg.jpg',
+        box_two_img: 'resources/dark_bg.jpg',
+        box_three_img: 'resources/dark_bg.jpg',
+        box_four_img: 'resources/dark_bg.jpg',
+      };
+    },
+    created() {
+      this.$on('generate_random', () => {
+        choices = ['resources/quaver.png', 'resources/semi_quaver.png', 'resources/triplets.png', 'resources/rest.png'];
+        this.box_one_img = choices[getRandomInt(4)];
+        this.box_two_img = choices[getRandomInt(4)];
+        this.box_three_img = choices[getRandomInt(4)];
+        this.box_four_img = choices[getRandomInt(4)];
+      });
+    }
+  })
