@@ -11,6 +11,10 @@ const router = new VueRouter({
       path: '/student',
       name: 'student',
       component: comps['v-student']
+    }, {
+      path: '/tutor',
+      name: 'tutor',
+      component: comps['v-tutor']
     }]
 });
 

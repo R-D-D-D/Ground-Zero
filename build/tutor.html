@@ -1,0 +1,33 @@
+<vtemplate id="v-tutor"><div class="container-fluid home-student-bg"><div class="row mb-5"><div class="col"><nav class="navbar navbar-expand-lg navbar-dark" id="home-nav"><a id="logo" href="#">MUSIC ACADEMY<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto"><li class="nav-item active"><a class="nav-link text-light" href="#">Home</a></li><li class="nav-item"><a class="nav-link text-light" href="#">About</a></li></ul></div></a></nav></div></div><div class="row mt-5 mb-5 justify-content-center"><div class="col-3"><button class="btn btn-outline-light btn-lg" v-on:click="$emit('generate_random')">Play Sequence</button></div></div><div class="row mt-5 mb-5"><div class="col-2"><div class="p"></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_one_img"/></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_two_img"/></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_three_img"/></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_four_img"/></div></div><div class="col-2"><div class="p"></div></div></div><div class="row mt-5"><div class="col-2"><div class="p"></div></div><div class="col-2"><select class="btn btn-outline-light" v-model="selected_one" v-on:change="$emit('update_display')"><option disabled="disabled" value="">Select a note</option><option v-for="option in options">{{ option }}</option></select></div><div class="col-2"><select class="btn btn-outline-light" v-model="selected_two" v-on:change="$emit('update_display')"><option disabled="disabled" value="">Select a note</option><option v-for="option in options">{{ option }}</option></select></div><div class="col-2"><select class="btn btn-outline-light" v-model="selected_three" v-on:change="$emit('update_display')"><option disabled="disabled" value="">Select a note</option><option v-for="option in options">{{ option }}</option></select></div><div class="col-2"><select class="btn btn-outline-light" v-model="selected_four" v-on:change="$emit('update_display')"><option disabled="disabled" value="">Select a note</option><option v-for="option in options">{{ option }}</option></select></div><div class="col-2"><div class="p"></div></div></div></div></vtemplate><script>comps.load("v-tutor")
+comps.update('v-tutor', {
+  data() {
+    return {
+      selected_one: '',
+      selected_two: '',
+      selected_three: '',
+      selected_four: '',
+      options: ['quaver', 'semi_quaver', 'triplets', 'rest'],
+      box_one_img: 'resources/transparent.png',
+      box_two_img: 'resources/transparent.png',
+      box_three_img: 'resources/transparent.png',
+      box_four_img: 'resources/transparent.png',
+    };
+  },
+  created() {
+    this.$on('update_display', () => {
+      if (!(this.selected_one === '')) {
+        //- console.log(`resources/${this.selected_one}.png`)
+        this.box_one_img = `resources/${this.selected_one}.png`;
+      }
+      if (!(this.selected_two === '')) {
+        this.box_two_img = `resources/${this.selected_two}.png`;
+      }
+      if (!(this.selected_three === '')) {
+        this.box_three_img = `resources/${this.selected_three}.png`;
+      }
+      if (!(this.selected_four === '')) {
+        this.box_four_img = `resources/${this.selected_four}.png`;
+      }
+    })
+  }
+})</script>

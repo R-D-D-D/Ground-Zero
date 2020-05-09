@@ -1,4 +1,4 @@
-<html><head><link href="webfonts/fa.min.css" rel="stylesheet"/><link href="style.css" rel="stylesheet"/><script src="https://unpkg.com/vue/dist/vue.js"></script><script src="https://unpkg.com/vuex/dist/vuex.min.js"></script><script src="https://unpkg.com/vue-router/dist/vue-router.min.js"></script><script src="util.js"></script><script src="api.js"></script><script src="store.js"></script><link href="style.css" rel="stylesheet"/><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/></head><body><div id="app"><router-view></router-view></div><vtemplate id="v-login"><input v-model="admin_pass" placeholder="enter pass"/><button v-on:click="$emit('admin_login')">Enter admin pass</button></vtemplate><script>comps.load("v-login")
+<!DOCTYPE html><html><head><link href="webfonts/fa.min.css" rel="stylesheet"><link href="style.css" rel="stylesheet"><script src="https://unpkg.com/vue/dist/vue.js"></script><script src="https://unpkg.com/vuex/dist/vuex.min.js"></script><script src="https://unpkg.com/vue-router/dist/vue-router.min.js"></script><script src="util.js"></script><script src="api.js"></script><script src="store.js"></script><link href="style.css" rel="stylesheet"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></head><body><div id="app"><router-view></router-view></div><vtemplate id="v-login"><input v-model="admin_pass" placeholder="enter pass"><button v-on:click="$emit('admin_login')">Enter admin pass</button></vtemplate><script>comps.load("v-login")
 comps.update('v-login', {
   data() {
     return {
@@ -19,7 +19,7 @@ comps.update('v-login', {
       }
     });
   }
-})</script><vtemplate id="v-list"><div class="container-fluid home-bg"><div class="row mb-5"><div class="col"><nav class="navbar navbar-expand-lg navbar-dark" id="home-nav"><a id="logo" href="#">MUSIC ACADEMY<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto"><li class="nav-item active"><a class="nav-link text-light" href="#">Home</a></li><li class="nav-item"><a class="nav-link text-light" href="#">About</a></li></ul></div></a></nav></div></div><div class="home-text row"><div class="col offset-md-1 mt-4"><h3 class="text-light text-left mb-2" style="margin-top:1%;">Choose</h3><h1 class="text-light text-left">The Music Academy</h1></div></div><div class="row justify-content-around"><div class="col-6 mt-4 text-center"><router-link class="btn btn-outline-light btn-lg" to="/student">Use as Student</router-link></div><div class="col-6 mt-4 text-center"><a class="btn btn-outline-light btn-lg" href="https://google.com">Use as Tutor</a></div></div></div></vtemplate><script>comps.load("v-list")
+})</script><vtemplate id="v-list"><div class="container-fluid home-bg"><div class="row mb-5"><div class="col"><nav class="navbar navbar-expand-lg navbar-dark" id="home-nav"><a id="logo" href="#">MUSIC ACADEMY<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto"><li class="nav-item active"><a class="nav-link text-light" href="#">Home</a></li><li class="nav-item"><a class="nav-link text-light" href="#">About</a></li></ul></div></a></nav></div></div><div class="home-text row"><div class="col offset-md-1 mt-4"><h3 class="text-light text-left mb-2" style="margin-top:1%;">Choose</h3><h1 class="text-light text-left">The Music Academy</h1></div></div><div class="row justify-content-around"><div class="col-6 mt-4 text-center"><router-link class="btn btn-outline-light btn-lg" to="/student">Use as Student</router-link></div><div class="col-6 mt-4 text-center"><router-link class="btn btn-outline-light btn-lg" to="/tutor">Use as Tutor</router-link></div></div></div></vtemplate><script>comps.load("v-list")
 comps.update('v-list', {
   //- data() {
   //-   return {
@@ -32,15 +32,15 @@ comps.update('v-list', {
   //-   }
   //- }
 })
-Vue.component('list', comps['v-list'])</script><vtemplate id="v-student"><div class="container-fluid home-student-bg"><div class="row mb-5"><div class="col"><nav class="navbar navbar-expand-lg navbar-dark" id="home-nav"><a id="logo" href="#">MUSIC ACADEMY<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto"><li class="nav-item active"><a class="nav-link text-light" href="#">Home</a></li><li class="nav-item"><a class="nav-link text-light" href="#">About</a></li></ul></div></a></nav></div></div><div class="row mt-5 mb-5 justify-content-center"><div class="col-3"><button class="btn btn-outline-light btn-lg" v-on:click="$emit('generate_random')">Get random sequence</button></div></div><div class="row mt-5"><div class="col-2"><div class="p"></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_one_img"/></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_two_img"/></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_three_img"/></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_four_img"/></div></div><div class="col-2"><div class="p"></div></div></div></div></vtemplate><script>comps.load("v-student")
+Vue.component('list', comps['v-list'])</script><vtemplate id="v-student"><div class="container-fluid home-student-bg"><div class="row mb-5"><div class="col"><nav class="navbar navbar-expand-lg navbar-dark" id="home-nav"><a id="logo" href="#">MUSIC ACADEMY<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto"><li class="nav-item active"><a class="nav-link text-light" href="#">Home</a></li><li class="nav-item"><a class="nav-link text-light" href="#">About</a></li></ul></div></a></nav></div></div><div class="row mt-5 mb-5 justify-content-center"><div class="col-3"><button class="btn btn-outline-light btn-lg" v-on:click="$emit('generate_random')">Get random sequence</button></div></div><div class="row mt-5"><div class="col-2"><div class="p"></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_one_img"></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_two_img"></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_three_img"></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_four_img"></div></div><div class="col-2"><div class="p"></div></div></div></div></vtemplate><script>comps.load("v-student")
 comps.update('v-student', {
   data() {
     return {
       admin_pass: '',
-      box_one_img: 'resources/dark_bg.jpg',
-      box_two_img: 'resources/dark_bg.jpg',
-      box_three_img: 'resources/dark_bg.jpg',
-      box_four_img: 'resources/dark_bg.jpg',
+      box_one_img: 'resources/transparent.png',
+      box_two_img: 'resources/transparent.png',
+      box_three_img: 'resources/transparent.png',
+      box_four_img: 'resources/transparent.png',
     };
   },
   created() {
@@ -51,5 +51,37 @@ comps.update('v-student', {
       this.box_three_img = choices[getRandomInt(4)];
       this.box_four_img = choices[getRandomInt(4)];
     });
+  }
+})</script><vtemplate id="v-tutor"><div class="container-fluid home-student-bg"><div class="row mb-5"><div class="col"><nav class="navbar navbar-expand-lg navbar-dark" id="home-nav"><a id="logo" href="#">MUSIC ACADEMY<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto"><li class="nav-item active"><a class="nav-link text-light" href="#">Home</a></li><li class="nav-item"><a class="nav-link text-light" href="#">About</a></li></ul></div></a></nav></div></div><div class="row mt-5 mb-5 justify-content-center"><div class="col-3"><button class="btn btn-outline-light btn-lg" v-on:click="$emit('generate_random')">Play Sequence</button></div></div><div class="row mt-5 mb-5"><div class="col-2"><div class="p"></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_one_img"></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_two_img"></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_three_img"></div></div><div class="col-2"><div class="p border square text-center"><img class="p-2" v-bind:src="box_four_img"></div></div><div class="col-2"><div class="p"></div></div></div><div class="row mt-5"><div class="col-2"><div class="p"></div></div><div class="col-2"><select class="btn btn-outline-light" v-model="selected_one" v-on:change="$emit('update_display')"><option disabled value="">Select a note</option><option v-for="option in options">{{ option }}</option></select></div><div class="col-2"><select class="btn btn-outline-light" v-model="selected_two" v-on:change="$emit('update_display')"><option disabled value="">Select a note</option><option v-for="option in options">{{ option }}</option></select></div><div class="col-2"><select class="btn btn-outline-light" v-model="selected_three" v-on:change="$emit('update_display')"><option disabled value="">Select a note</option><option v-for="option in options">{{ option }}</option></select></div><div class="col-2"><select class="btn btn-outline-light" v-model="selected_four" v-on:change="$emit('update_display')"><option disabled value="">Select a note</option><option v-for="option in options">{{ option }}</option></select></div><div class="col-2"><div class="p"></div></div></div></div></vtemplate><script>comps.load("v-tutor")
+comps.update('v-tutor', {
+  data() {
+    return {
+      selected_one: '',
+      selected_two: '',
+      selected_three: '',
+      selected_four: '',
+      options: ['quaver', 'semi_quaver', 'triplets', 'rest'],
+      box_one_img: 'resources/transparent.png',
+      box_two_img: 'resources/transparent.png',
+      box_three_img: 'resources/transparent.png',
+      box_four_img: 'resources/transparent.png',
+    };
+  },
+  created() {
+    this.$on('update_display', () => {
+      if (!(this.selected_one === '')) {
+        //- console.log(`resources/${this.selected_one}.png`)
+        this.box_one_img = `resources/${this.selected_one}.png`;
+      }
+      if (!(this.selected_two === '')) {
+        this.box_two_img = `resources/${this.selected_two}.png`;
+      }
+      if (!(this.selected_three === '')) {
+        this.box_three_img = `resources/${this.selected_three}.png`;
+      }
+      if (!(this.selected_four === '')) {
+        this.box_four_img = `resources/${this.selected_four}.png`;
+      }
+    })
   }
 })</script><script src="app.js"></script></body></html>
