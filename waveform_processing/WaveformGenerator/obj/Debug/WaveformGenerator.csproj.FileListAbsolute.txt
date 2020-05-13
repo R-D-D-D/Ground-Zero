@@ -1,0 +1,12 @@
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.csprojAssemblyReference.cache
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.Form1.resources
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.Properties.Resources.resources
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.csproj.GenerateResource.cache
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.csproj.CoreCompileInputs.cache
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\bin\Debug\WaveformGenerator.exe.config
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\bin\Debug\WaveformGenerator.exe
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\bin\Debug\WaveformGenerator.pdb
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\bin\Debug\Bass.Net.dll
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.csproj.CopyComplete
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.exe
+C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.pdb
