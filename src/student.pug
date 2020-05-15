@@ -14,24 +14,54 @@ vtemplate#v-student
                     a.nav-link.text-light(href='#') About
       .row.mt-5.mb-5.justify-content-center
         .col-3
-          button.btn.btn-outline-light.btn-lg(v-on:click="$emit('generate_random')") Get random sequence
+          button.btn.btn-outline-light.btn-lg(v-on:click="$emit('generate_random')") Get Random Sequence
+        .col-3
+          button.btn.btn-outline-light.btn-lg(v-on:click="$emit('play_sequence')") Play Sequence
       .row.mt-5
         .col-2
           .p
         .col-2
-          .p.border.square.text-center
+          .p.border.square.text-center(v-bind:class="{ inactive: is_one_inactive }")
             img.p-2(v-bind:src="box_one_img")
         .col-2
-          .p.border.square.text-center
+          .p.border.square.text-center(v-bind:class="{ inactive: is_two_inactive }")
             img.p-2(v-bind:src="box_two_img")
         .col-2
-          .p.border.square.text-center
+          .p.border.square.text-center(v-bind:class="{ inactive: is_three_inactive }")
             img.p-2(v-bind:src="box_three_img")
         .col-2
-          .p.border.square.text-center
+          .p.border.square.text-center(v-bind:class="{ inactive: is_four_inactive }")
             img.p-2(v-bind:src="box_four_img")
         .col-2
           .p
+
+      .row.recording.mt-5
+        .col
+          .row
+            .col.text-center
+              canvas.visualizer(height='60px')
+          .row.mt-2
+            .col-6.text-right
+              button.record.btn.btn-outline-light.btn-lg Record
+            .col-6.text-left
+              button.stop.btn.btn-outline-light.btn-lg Stop
+          .row.sound-clips.justfy-content-center.text-center
+          //- label(for='toggle') &#x2754;
+          //-   input#toggle(type='checkbox')
+          //-   aside
+          //-     h2 Information
+          //-     p
+          //-       | Web dictaphone is built using 
+          //-       a(href='https://developer.mozilla.org/en-US/docs/Web/API/Navigator.getUserMedia') getUserMedia
+          //-       |  and the 
+          //-       a(href='https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder_API') MediaRecorder API
+          //-       | , which provides an easier way to capture Media streams.
+          //-     p
+          //-       | Icon courtesy of 
+          //-       a(href='http://findicons.com/search/microphone') Find Icons
+          //-       | . Thanks to 
+          //-       a(href='http://soledadpenades.com/') Sole
+          //-       |  for the Oscilloscope code!
 
 script.
   comps.load("v-student")
@@ -39,19 +69,77 @@ script.
     data() {
       return {
         admin_pass: '',
+        selected_one: '',
+        selected_two: '',
+        selected_three: '',
+        selected_four: '',
         box_one_img: 'resources/transparent.png',
         box_two_img: 'resources/transparent.png',
         box_three_img: 'resources/transparent.png',
         box_four_img: 'resources/transparent.png',
+        is_one_inactive: true,
+        is_two_inactive: true,
+        is_three_inactive: true,
+        is_four_inactive: true
       };
     },
     created() {
       this.$on('generate_random', () => {
-        choices = ['resources/quaver.png', 'resources/semi_quaver.png', 'resources/triplets.png', 'resources/rest.png'];
-        this.box_one_img = choices[getRandomInt(4)];
-        this.box_two_img = choices[getRandomInt(4)];
-        this.box_three_img = choices[getRandomInt(4)];
-        this.box_four_img = choices[getRandomInt(4)];
+        choices = ['quaver', 'semi_quaver', 'triplets', 'rest'];
+        var one = choices[getRandomInt(4)];
+        var two = choices[getRandomInt(4)];
+        var three = choices[getRandomInt(4)];
+        var four = choices[getRandomInt(4)];
+        this.box_one_img = `resources/${one}.png`;
+        this.box_two_img = `resources/${two}.png`;
+        this.box_three_img = `resources/${three}.png`;
+        this.box_four_img = `resources/${four}.png`;
+        this.selected_one = one;
+        this.selected_two = two;
+        this.selected_three = three;
+        this.selected_four = four;
       });
+
+      this.$on('play_sequence', () => {
+        if (this.selected_one === '' || this.selected_two === '' || this.selected_three === '' || this.selected_four === '') {
+          return
+        } else {
+          var audio = new Audio()
+          audio_files = [`resources/${this.selected_one}.mp3`, `resources/${this.selected_two}.mp3`, `resources/${this.selected_three}.mp3`, `resources/${this.selected_four}.mp3`]
+          var index = 0;
+          audio.src=`resources/${this.selected_one}.mp3`;
+          this.is_one_inactive = false;
+          audio.play();
+          index++;
+
+          audio.onended = () => {
+              if (index < 4) {
+                  switch(index) {
+                    case 1:
+                      this.is_one_inactive = true;
+                      this.is_two_inactive = false;
+                      break;
+                    case 2:
+                      this.is_two_inactive = true;
+                      this.is_three_inactive = false;
+                      break;
+                    case 3:
+                      this.is_three_inactive = true;
+                      this.is_four_inactive = false;
+                      break;
+                    default:
+                      // code block
+                  }
+                  audio.src=audio_files[index];
+                  audio.play();
+                  index++;
+              } else {
+                this.is_four_inactive = true;
+              }
+          };
+        }
+      });
+
+      
     }
   })

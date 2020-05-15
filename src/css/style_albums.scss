@@ -317,264 +317,8 @@ footer {
   }
 }
 
-@media only screen and (max-width: 580px) {
-  #course-lessons-tabs {
-    margin-top: -4%;
-  }
-}
 
-.course-lessons-tab-content {
-  .tab-content {
-    margin-top: 3%;
-  }
-}
 
-.show_course {
-  .course-header {
-    .col {
-      padding: 15px;
-    }
-  }
-  .image {
-    background: center no-repeat;
-    height: 50vh;
-    background-size: cover;
-    background-color: black;
-  }
-  .image-text {
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    font-weight: bold;
-    border: 3px ridge rgb(200, 200, 200);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    width: 80%;
-    padding: 20px;
-    text-align: center;
-    h1, h2 {
-      color: white;
-      text-shadow: 2px 2px 4px black;
-    }
-    .title {
-      margin: 10px 0px;
-    }
-    .tutor-name {
-      color: rgb(210, 210, 210);
-      margin: 10px 0px;
-    }
-  }
-  .enroll {
-    margin: 30px 0px;
-    .col {
-      padding: 0px;
-    }
-  }
-  .edit-button {
-    margin: 20px 0px;
-    .col {
-      padding: 0px;
-    }
-  }
-  .content {
-    color: $gray-light;
-    margin-bottom: 10px;
-    .content-heading {
-      margin-bottom: 10px;
-    }
-    .features-list {
-        margin-top: 5px;
-      .list-inline-item {
-        color: $gray;
-        margin-top: 10px;
-        margin-right: 50px;
-        img {
-          margin-top: -3px;
-          margin-right: 5px;
-        }
-      }
-    }
-  }
-  .target-heading, .prerequisites-heading {
-    margin-top: 20px;
-    font-size: 1.3em;
-    color: $gray;
-  }
-  .target, .prerequisites {
-    color: $gray-light;
-    margin-bottom: 10px;
-  }
-  .report-button {
-    margin-bottom: 20px;
-  }
-  .tutor {
-    margin-bottom: 30px;
-    .tutor-header {
-      margin-top: 15px;
-      margin-bottom: 20px;
-    }
-    .tutor-stats {
-      .tutor-gravatar {
-        img {
-          margin-left: 20%;
-          margin-bottom: 5px;
-        }
-      }
-      .tutor-rating, .tutor-students, .tutor-courses {
-        display: block;
-        margin-top: 5px;
-        img {
-          margin-top: -5px;
-        }
-      }
-    }
-    .tutor-name {
-      margin-bottom: 10px;
-      a {
-        text-decoration: none;
-        color: $gray;
-      }
-    }
-  }
-}
-
-.new_course {
-  .image {
-    margin-top: 15px;
-  }
-  .btn-back {
-    margin-top: 10px;
-  }
-}
-
-.edit_course {
-  h3, h2 {
-    color: $gray-dark;
-  }
-  .course-card-preview {
-    width: 200%;
-    margin-top: -10px;
-    margin-bottom: 10px;
-    .card-img-top {
-      width: 100%;
-      height: 10vw;
-      object-fit: cover;
-    }
-  }
-  .image {
-    margin: 10px 0px;
-    img {
-      border: 1px dashed $gray-light;
-    }
-  }
-  .tags-explanation {
-    font-size: 1.05em;
-    color: $gray-light;
-    margin-bottom: 10px;
-  }
-  .btn-submit {
-    padding-top: 10px;
-  }
-  .lessons-header {
-    margin-top: 10px;
-    h3, h2 {
-      text-align: left;
-    }
-  }
-  .lessons-list {
-    h3 {
-      font-size: 1.3em;
-      text-align: left;
-      margin-top: 0px;
-    }
-    margin-bottom: 10px;
-  }
-  .course-delete {
-    margin: 30px 0px 15px 0px;
-    h3, h2 {
-      text-align: left;
-    }
-    .btn-course-delete {
-      margin: 20px 0px;
-    }
-  }
-}
-
-/* lesson info */
-
-.lesson-new-header {
-  padding-top: 20px;
-  margin: 20px;
-}
-
-@media only screen and (max-width: 1200px) {
-  #show_lesson {
-    margin-top: 70px;
-  }
-}
-
-.lesson {
-  .lessons {
-    background-color: black;
-    margin-bottom: 20px;
-    padding: 0px;
-    .scrollmenu {
-      background-color: white;
-      .list-group {
-        padding-right: 0px;
-        direction: rtl;
-        overflow: auto;
-        .item-direction {
-          direction: ltr;
-        }
-      }
-    }
-    .video {
-      padding: 0px;
-    }
-    .video-none, .video-block {
-      color: white;
-      h2, h3 {
-        color: white;
-      }
-    }
-  }
-  .info {
-    .name {
-      font-size: 2em;
-    }
-  }
-}
-
-.new_lesson, .edit_lesson {
-  .btn-back {
-    margin: 10px 0px;
-  }
-  .video {
-    margin-bottom: 15px;
-    background-color: black;
-  }
-  .video-delete {
-    text-align: right;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    a {
-      color: $gray;
-    }
-  }
-  .lesson-delete {
-    h3, h2 {
-      text-align: left;
-      color: $gray-dark;
-    }
-    h2 {
-      margin-bottom: 20px;
-    }
-  }
-}
 
 /* home page */
 
@@ -623,7 +367,7 @@ footer {
   background-color: black;
   background-size: cover;
   overflow: hidden;
-  height: 100vh;
+  height: 800vh;
   .home-flash {
     margin-top: -1%;
     margin-bottom: -10%;
@@ -683,96 +427,6 @@ footer {
   background: transparent !important;
 }
 
-.home-features {
-  .list-inline {
-    margin-top: 13%;
-    padding: 25px 0px;
-    background-color: purple;
-    background: linear-gradient(to right, rgba(77, 38, 0, 0), rgba(102, 51, 0, 0.5), rgba(128, 64, 0, 1.0), rgba(153, 77, 0, 0.5), rgba(179, 89, 0, 0));
-    .list-inline-item {
-      margin: 5px 50px;
-      font-size: 1.2em;
-      text-shadow: 2px 2px 4px black;
-    }
-  }
-}
-
-.home-tutors-heading {
-  a {
-    color: $gray;
-    text-decoration: none;
-  }
-}
-
-.home-signup {
-  border: 1px solid $gray-light;
-  .divider {
-    border-left: 1px solid $gray-lighter;
-    border-right: 1px solid $gray-lighter;
-    height: 20%;
-    position: absolute;
-    right: 50%;
-  }
-  h2 {
-    font-size: 1.6em;
-  }
-  a {
-    font-size: 1.4em;
-    color: $gray;
-  }
-}
-
-#welcome-back {
-  .welcome-back-message {
-    color: $gray;
-    margin-bottom: 10px;
-  }
-  .welcome-back-card {
-    .card-img {
-      height: 12vw;
-      object-fit: cover;
-    }
-    .card-img-overlay {
-      background-color: rgba(0, 0, 0, 0.8);
-      border: 3px ridge rgb(200, 200, 200);
-      top: 30%;
-      left: 30%;
-      transform: translate(-25%, -20%);
-      z-index: 2;
-      width: 80%;
-      padding: 20px;
-      text-align: center;
-      text-shadow: 2px 2px 4px black;
-      a {
-        color: white;
-        text-decoration: none;
-      }
-    }
-  }
-}
-
-/* card */
-.card-footer {
-  height: 8vh;
-  padding: 15px;
-  text-align: inherit;
-}
-
-.card-text {
-  height: 30px;
-  font-size: 0.8em;
-}
-
-.centered {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1rem;
-  font-weight: bold;
-  width: 100%;
-  text-align: center;
-}
 
 .quaver {
   background: url("resources/quaver.png") center no-repeat;
@@ -784,4 +438,108 @@ footer {
 
 .triplet {
   background: url("resources/triplets.png") center no-repeat;
+}
+
+.active {
+  filter: brightness(150%);
+}
+
+.inactive {
+  filter: brightness(50%);
+}
+
+// MediaRecording
+.recording {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  h1, h2 {
+    font-size: 2rem;
+    text-align: center;
+    font-weight: normal;
+    padding: 0.5rem 0 0 0;
+  }
+  
+  .main-controls {
+    padding: 0.5rem 0;
+  }
+  
+  canvas {
+    width: 50%;
+  }
+  
+  /* Make the clips use as much space as possible, and
+   * also show a scrollbar when there are too many clips to show
+   * in the available space */
+  .sound-clips {
+    flex: 1;
+    overflow: auto;
+    text-align: center;
+  }
+  
+  section, article {
+    display: block;
+  }
+  
+  audio {
+    width: 70%;
+    display: block;
+    margin: 1rem auto 0.5rem;
+  }
+  
+  .clip p {
+    display: inline-block;
+    font-size: 1rem;
+  }
+  
+  .clip button {
+    font-size: 1rem;
+    float: right;
+  }
+  
+  
+  /* Checkbox hack to control information box display */
+  
+  label {
+    font-size: 3rem;
+    position: absolute;
+    top: 2px;
+    right: 3px;
+    z-index: 5;
+    cursor: pointer;
+    background-color: black;
+    border-radius: 10px;
+  }
+  
+  input[type=checkbox] {
+     position: absolute;
+     top: -100px;
+  }
+  
+  
+  /* Cursor when clip name is clicked over */
+  
+  .clip p {
+    cursor: pointer;
+  }
+  
+  /* Adjustments for wider screens */
+  @media all and (min-width: 800px) {
+    /* Don't take all the space as readability is lost when line length
+       goes past a certain size */
+    .wrapper {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+  }
 }
