@@ -10,3 +10,14 @@ C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\bin\Debug\Bass.
 C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.csproj.CopyComplete
 C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.exe
 C:\Users\User\Downloads\WaveformGenerator_demo\WaveformGenerator\obj\Debug\WaveformGenerator.pdb
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\bin\Debug\WaveformGenerator.exe.config
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\bin\Debug\WaveformGenerator.exe
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\bin\Debug\WaveformGenerator.pdb
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.csprojAssemblyReference.cache
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.Form1.resources
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.Properties.Resources.resources
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.csproj.GenerateResource.cache
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.csproj.CoreCompileInputs.cache
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.csproj.CopyComplete
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.exe
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.pdb

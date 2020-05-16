@@ -1,4 +1,4 @@
-﻿/*
+/*
 WaveGenerator.cs
 A C# class for generating an audio waveform asynchronously.
 
@@ -52,6 +52,12 @@ namespace WaveformGenerator {
             LeftSideOnTopOrLeft,
             LeftSideOnBottomOrRight,
         }
+
+        public enum FileType
+        {
+            Solution,
+            Sample
+        }
         #endregion
 
 
@@ -79,6 +85,16 @@ namespace WaveformGenerator {
                 PercentageCompleted = percentageCompleted;
             }
         }
+
+        //public class FileTypeEventArgs : EventArgs
+        //{
+        //    public FileType FileCharacteristic { get; private set; }
+
+        //    public FileTypeEventArgs(FileType fileCharacteristic)
+        //    {
+        //        FileCharacteristic = fileCharacteristic;
+        //    }
+        //}
         #endregion
 
 
@@ -86,12 +102,11 @@ namespace WaveformGenerator {
         private string filePath;
         private int stream;
         private float lastProgressPercentageEventRaised;
-        private List<float> leftLevelList;
-        private List<float> rightLevelList;
+        public List<float> leftLevelList { get; private set; }
+        public List<float> rightLevelList { get; private set; }
         private CancellationTokenSource cts;
         private Stopwatch progressSw;
         #endregion
-
 
         #region Properties
         // Defaults.
@@ -218,6 +233,15 @@ namespace WaveformGenerator {
             long trackLengthInBytes = Bass.BASS_ChannelGetLength(stream);
             long frameLengthInBytes = Bass.BASS_ChannelSeconds2Bytes(stream, 0.02d);
             NumFrames = (int) Math.Round(1f * trackLengthInBytes / frameLengthInBytes);
+#if DEBUG
+            Console.WriteLine(stream);
+            BASS_CHANNELINFO info = new BASS_CHANNELINFO();
+            Bass.BASS_ChannelGetInfo(stream, info);
+            Console.WriteLine(info.ToString());
+            Console.WriteLine($"track length in bytes from waveformgenerator.cs: {trackLengthInBytes}");
+            Console.WriteLine($"how many bytes in 20 ms from waveformgenerator.cs: {frameLengthInBytes}");
+
+#endif
 
             // Change state.
             State = ReadyState.CreatedStream;
@@ -352,6 +376,153 @@ namespace WaveformGenerator {
             return WaveformGenerator.CreateWaveformImage(Direction, Orientation, width, height, curPeakValue, numFullRenderFrames,
                 leftList.ToArray(), rightList.ToArray(), LeftSideBrush, RightSideBrush, CenterLineBrush);
         }
+
+        public List<List<int>> FindAllVolumeSpurts()
+        {
+            List<List<int>> myList = new List<List<int>>();
+
+            int i = 0;
+            int startIndex = -1;
+            // state 0 means current iteration does not involve a volume spurt, state 1 means currently experiencing volume spurt
+            int state = 0;
+            foreach (float pt in leftLevelList)
+            {
+                if (pt > 0.1f)
+                {
+                    if (startIndex == -1)
+                    {
+                        if (i == 0)
+                            startIndex = i;
+                        else
+                            startIndex = i - 1;
+                        state = 1;
+                    }
+                } else
+                {
+                    if (state == 1)
+                    {
+                        myList.Add(new List<int> { startIndex, i });
+                        startIndex = -1;
+                        state = 0;
+                    }
+                }
+
+                if (i == (leftLevelList.Count - 1) && startIndex != -1 && state == 1)
+                {
+                    myList.Add(new List<int> { startIndex, i });
+                }
+
+                i++;
+            }
+            return myList;
+        }
+
+        public string CompareTo(WaveformGenerator other, int mistakeRangeInMiliseconds)
+        {
+            // first align the start of the two files
+            List<List<int>> volSpurtsSelf = this.FindAllVolumeSpurts();
+            List<List<int>> volSpurtsOther = other.FindAllVolumeSpurts();
+            int numOfVolSpurtsSelf = volSpurtsSelf.Count;
+            int numOfVolSpurtsOther = volSpurtsOther.Count;
+#if DEBUG
+            Console.WriteLine("Before aligning----------------------------------------------------------------");
+            Console.WriteLine("Volumn Spurt List:----------------------------------------------------------------");
+            foreach (List<int> i in volSpurtsSelf)
+            {
+                Console.WriteLine($"{i[0]}, {i[1]}");
+            }
+            Console.WriteLine("leftLevelList:----------------------------------------------------------------");
+            foreach (float i in leftLevelList)
+            {
+                Console.WriteLine($"{i}");
+            }
+#endif
+            if (numOfVolSpurtsOther != numOfVolSpurtsSelf)
+                return $"Different number of beats detected, Solution has {numOfVolSpurtsSelf} spurts and Sample has {numOfVolSpurtsOther} spurts";
+            else
+                this.AlignWith(other, volSpurtsSelf, volSpurtsOther, numOfVolSpurtsSelf, numOfVolSpurtsOther);
+
+            // align finish, identify volume spurts difference in position, since level list is edited, find the spurts again
+            volSpurtsSelf = this.FindAllVolumeSpurts();
+            volSpurtsOther = other.FindAllVolumeSpurts();
+            numOfVolSpurtsSelf = volSpurtsSelf.Count;
+            numOfVolSpurtsOther = volSpurtsOther.Count;
+            string result = "";
+            for (int i = 0; i < numOfVolSpurtsOther; i++)
+            {
+                int diffInMiliseconds = (volSpurtsOther[i][0] - volSpurtsSelf[i][0]) * 20;
+                if (Math.Abs(diffInMiliseconds) < mistakeRangeInMiliseconds)
+                {
+                    result += $"Beat {i} has no problem!";
+                }
+                else
+                {
+                    if (diffInMiliseconds > 0)
+                    {
+                        result += $"Beat {i} is a little too late!";
+                    }
+                    else
+                    {
+                        result += $"Beat {i} is a little too early!";
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public void AlignWith(WaveformGenerator other, List<List<int>> volSpurtsSelf, List<List<int>> volSpurtsOther, int numOfVolSpurtsSelf, int numOfVolSpurtsOther)
+        {
+            int solutionFrames = this.NumFrames;
+            int sampleFrames = other.NumFrames;
+            int usefulSolutionFrames = volSpurtsSelf[numOfVolSpurtsSelf - 1][1] - volSpurtsSelf[0][0] + 1;
+            int usefulSampleFrames = volSpurtsOther[numOfVolSpurtsOther - 1][1] - volSpurtsOther[0][0] + 1;
+
+            // truncate the frames to only those useful ones
+            this.TruncateList(volSpurtsSelf[0][0], volSpurtsSelf[numOfVolSpurtsSelf - 1][1]);
+            other.TruncateList(volSpurtsOther[0][0], volSpurtsOther[numOfVolSpurtsOther - 1][1]);
+
+            int diff = usefulSolutionFrames - usefulSampleFrames;
+            if (diff > 0)
+            {
+                other.FillList(diff);
+            }
+            else if (diff < 0)
+            {
+                this.FillList(diff);
+            }
+            this.AdjustNumFrames();
+            other.AdjustNumFrames();
+        }
+
+        public void TruncateList (int front, int back)
+        {
+            if (back != this.leftLevelList.Count - 1)
+            {
+                this.leftLevelList.RemoveRange(back + 1, this.leftLevelList.Count - back - 1);
+                this.rightLevelList.RemoveRange(back + 1, this.leftLevelList.Count - back - 1);
+            }
+            if (front != 0)
+            {
+                this.leftLevelList.RemoveRange(0, front);
+                this.rightLevelList.RemoveRange(0, front);
+            }
+        }
+
+        public void FillList (int number)
+        {
+            for(int i = 0; i < number; i++)
+            {
+                this.leftLevelList.Add(0f);
+                this.rightLevelList.Add(0f);
+            }
+        }
+
+        public void AdjustNumFrames()
+        {
+            this.NumFrames = this.leftLevelList.Count;
+            this.FrameDoneCount = NumFrames;
+        }
         #endregion
 
 
@@ -380,6 +551,9 @@ namespace WaveformGenerator {
                         Bass.BASS_ChannelGetLevel(stream, levels);
                         float leftLevel = levels[0];
                         float rightLevel = levels[1];
+#if DEBUG
+                        Console.WriteLine($"Left level: {leftLevel}, Right level: {rightLevel}");
+#endif
 
                         // Update left and right levels.
                         leftLevelList.Add(leftLevel);
