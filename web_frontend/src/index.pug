@@ -8,10 +8,14 @@ html
     script(src="https://unpkg.com/vue/dist/vue.js")
     script(src="https://unpkg.com/vuex/dist/vuex.min.js")
     script(src="https://unpkg.com/vue-router/dist/vue-router.min.js")
+    script(src="https://unpkg.com/tone@13.8.25/build/Tone.js")
 
     script(src="util.js")
     script(src="api.js")
     script(src="store.js")
+    script(src="tone.js")
+    script(src="recorder.js")
+    script(src="lib/web-audio-recorder-js/lib/WebAudioRecorder.js")
 
     link(href="style.css", rel="stylesheet")
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
@@ -24,7 +28,10 @@ html
       //- h2(v-if="logged_in") Logged in
       //- h2(v-else) Please login first
       router-view
-    
+
+      h1 Click anywhere to start
+      audio(controls='')
+  
     include login
     include albums
     include student

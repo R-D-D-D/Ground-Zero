@@ -1,4 +1,2 @@
-How to customize how long does the get channel return?
-How to reduce noise and identify volumn spurts?
 How to find out which beat is missing?
 Can this app be turned into something like, ./compare solution.wav sample.wav > result.jpg

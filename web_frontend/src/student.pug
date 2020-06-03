@@ -17,6 +17,11 @@ vtemplate#v-student
           button.btn.btn-outline-light.btn-lg(v-on:click="$emit('generate_random')") Get Random Sequence
         .col-3
           button.btn.btn-outline-light.btn-lg(v-on:click="$emit('play_sequence')") Play Sequence
+        .col-3
+          button.btn.btn-outline-light.btn-lg(v-on:click="$emit('play_and_record_sequence')") Play and Record Sequence
+        .col-3
+          audio#solution-audio(controls="")
+
       .row.mt-5
         .col-2
           .p
@@ -45,6 +50,8 @@ vtemplate#v-student
               button.record.btn.btn-outline-light.btn-lg Record
             .col-6.text-left
               button.stop.btn.btn-outline-light.btn-lg Stop
+      
+      .row.sound-clips
 
 
 script.
@@ -68,6 +75,7 @@ script.
       };
     },
     created() {
+
       this.$on('generate_random', () => {
         choices = ['quaver', 'semi_quaver', 'triplets', 'rest'];
         var one = choices[getRandomInt(4)];
@@ -83,6 +91,12 @@ script.
         this.selected_three = three;
         this.selected_four = four;
       });
+
+      this.$on('play_and_record_sequence', () => {
+        const audio = document.getElementById('solution-audio');
+        tone.init(true);
+        tone.createAndRecordSequence(60, ["c/5/16", "c/5/16", "c/5/8", "c/5/8d", "c/5/16", "c/5/qr", "c/5/16", "c/5/16", "c/5/16r", "c/5/16"], 2, audio);
+      })
 
       this.$on('play_sequence', () => {
         if (this.selected_one === '' || this.selected_two === '' || this.selected_three === '' || this.selected_four === '') {

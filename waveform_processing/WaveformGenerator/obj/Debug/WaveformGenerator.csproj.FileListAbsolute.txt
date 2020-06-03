@@ -21,3 +21,6 @@ C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator
 C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.csproj.CopyComplete
 C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.exe
 C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\obj\Debug\WaveformGenerator.pdb
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\bin\Debug\Newtonsoft.Json.dll
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\bin\Debug\Newtonsoft.Json.xml
+C:\Users\User\Documents\GitHub\Ground-Zero\waveform_processing\WaveformGenerator\bin\Debug\OggVorbisEncoder.dll
