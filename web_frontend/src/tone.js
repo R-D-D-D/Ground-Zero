@@ -30,9 +30,8 @@ const tone = {
     },
   }),
 
-  player: new Tone.Player('https://cdn.jsdelivr.net/gh/R-D-D-D/Ground-Zero/web_frontend/src/resources/metronome_click.wav'),
-
   freqEnv: [],
+  started: false,
 
   notesToEvents(notes) {
     var result = [];
@@ -63,7 +62,8 @@ const tone = {
     });
   },
 
-  init(play, player) {
+  init(play) {
+    Tone.Transport.bpm.value = bpm;
     this.poly.voices.forEach((v, i) => {
       const env = new Tone.FrequencyEnvelope({
         attack: 0.001,
@@ -80,15 +80,16 @@ const tone = {
     this.noise.connect(this.lowPass);
     this.lowPass.toMaster();
     this.poly.toMaster();
-    this.player.toMaster();
   },
 
   createAndRecordSequence(bpm, notes, numBars, audio) {
     // simple check to avoid double play
-    var started = false;
-    if (started) return;
+    if (this.started) return;
+    var player = new Tone.Player('https://cdn.jsdelivr.net/gh/R-D-D-D/Ground-Zero/web_frontend/src/resources/metronome_click.mp3');
+    player.toMaster();
 
     Tone.Transport.bpm.value = bpm;
+    Tone.Context.latencyHint = 'fastest';
     const part = new Tone.Part((time) => {
       //the events will be given to the callback with the time they occur
       this.poly.voices.forEach((v, i) => {
@@ -96,36 +97,35 @@ const tone = {
         v.envelope.triggerAttackRelease('16n', time);
       });
       this.noise.triggerAttackRelease('16n', time);
-      }, [{ time : 0, note : 'A4', dur : '16n'},
-        { time : Tone.Time('4n'), note : 'A4', dur : '16n'},
-        { time : 2 * Tone.Time('4n'), note : 'A4', dur : '16n'},
-        { time : 3 * Tone.Time('4n'), note : 'A4', dur : '16n'}]
+      }, [0, Tone.Time('4n'), 2 * Tone.Time('4n'), 3 * Tone.Time('4n')]
     );
-    started = true;
+    this.started = true;
 
-    // part.start(0);
+    part.start(0);
 
-    // //loop the part 3 times
-    // part.loop = 1;
-    // part.loopEnd = '1m';
+    //loop the part 3 times
+    part.loop = 1;
+    part.loopEnd = '1m';
 
     Tone.Transport.schedule((time) => {
       // recorder.stop();
       console.log('stopped')
       Tone.Transport.stop();
+      this.started = false;
     }, "2m");
 
-
     Tone.Transport.scheduleRepeat(() => {
-      this.player.restart();
-    }, "8n", "1m");
+      console.log(player.loaded)
+      player.restart();
+    }, "4n", "0m");
+
+    Tone.Transport.start();
 
     // var seq = new Tone.Sequence((time, note) => {
     //   this.player.get("click").start();
     // //straight quater notes
     // }, [1, 2, 3, 4, 5, 6, 7, 8], "8n");
     //start the Transport for the events to start
-    Tone.Transport.start();
     
     console.log(Tone.Transport.bpm.value)
     console.log(Tone.Time('1m').toSeconds())
