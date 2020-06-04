@@ -30,7 +30,7 @@ const tone = {
     },
   }),
 
-  player: null,
+  player: new Tone.Player('https://cdn.jsdelivr.net/gh/R-D-D-D/Ground-Zero/web_frontend/src/resources/metronome_click.wav'),
 
   freqEnv: [],
 
@@ -64,7 +64,6 @@ const tone = {
   },
 
   init(play, player) {
-    this.player = player;
     this.poly.voices.forEach((v, i) => {
       const env = new Tone.FrequencyEnvelope({
         attack: 0.001,
@@ -104,27 +103,30 @@ const tone = {
     );
     started = true;
 
-    part.start(0);
+    // part.start(0);
 
-    //loop the part 3 times
-    part.loop = 1;
-    part.loopEnd = '1m';
+    // //loop the part 3 times
+    // part.loop = 1;
+    // part.loopEnd = '1m';
 
-    Tone.Transport.schedule(function(time){
+    Tone.Transport.schedule((time) => {
       // recorder.stop();
+      console.log('stopped')
       Tone.Transport.stop();
     }, "2m");
 
-    Tone.Buffer.onload = function() {
-			//this will start the player on every quarter note
-			Tone.Transport.setInterval(function(time){
-			    player.start(time);
-			}, "4n");
-      //start the Transport for the events to start
-      Tone.Transport.start();
-		};
 
-    console.log("reach here?")
+    Tone.Transport.scheduleRepeat(() => {
+      this.player.restart();
+    }, "8n", "1m");
+
+    // var seq = new Tone.Sequence((time, note) => {
+    //   this.player.get("click").start();
+    // //straight quater notes
+    // }, [1, 2, 3, 4, 5, 6, 7, 8], "8n");
+    //start the Transport for the events to start
+    Tone.Transport.start();
+    
     console.log(Tone.Transport.bpm.value)
     console.log(Tone.Time('1m').toSeconds())
 

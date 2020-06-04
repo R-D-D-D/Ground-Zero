@@ -113,8 +113,7 @@ script.
 
       this.$on('play_and_record_sequence', () => {
         const audio = document.getElementById('solution-audio');
-        var player = new Tone.Player(`./resources/metronome_click.wav`);
-        tone.init(true, player);
+        tone.init(true);
         tone.createAndRecordSequence(60, ["c/5/16", "c/5/16", "c/5/8", "c/5/8d", "c/5/16", "c/5/qr", "c/5/16", "c/5/16", "c/5/16r", "c/5/16"], 2, audio);
       })
 
