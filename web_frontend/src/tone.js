@@ -32,6 +32,7 @@ const tone = {
 
   freqEnv: [],
   started: false,
+  player: null,
 
   notesToEvents(notes) {
     var result = [];
@@ -40,30 +41,34 @@ const tone = {
       var temp = element.split("/")[2];
       var isRest = false;
       var isDot = false;
-      if (temp.includes("d") || temp.include("r")) {
+      if (temp.includes("d") || temp.includes("r")) {
         if (temp.includes("r")) {
-          temp.replace("r", "");
+          temp = temp.replace("r", "");
           isRest = true;
         }
         if (temp.includes("d")) {
-          temp.replace("d", "");
+          temp = temp.replace("d", "");
           isDot = true;
         }
       }
       if (temp.includes("q")) {
-
+        temp = '4';
       } else if (temp.includes("h")) {
-
+        temp = '2';
       } else if (temp.includes("f")) {
-
-      } else {
-
+        temp = '4';
+      } 
+      temp += 'n';
+      if (isDot) temp += "."
+      if (!isRest) {
+        result.push(time);
       }
+      time += Tone.Time(temp);
     });
+    return result;
   },
 
   init(play) {
-    Tone.Transport.bpm.value = bpm;
     this.poly.voices.forEach((v, i) => {
       const env = new Tone.FrequencyEnvelope({
         attack: 0.001,
@@ -80,15 +85,19 @@ const tone = {
     this.noise.connect(this.lowPass);
     this.lowPass.toMaster();
     this.poly.toMaster();
+    if (this.player == null) {
+      this.player = new Tone.Player('https://cdn.jsdelivr.net/gh/R-D-D-D/Ground-Zero/web_frontend/src/resources/metronome_click.mp3');
+      this.player.toMaster();
+    }
   },
 
   createAndRecordSequence(bpm, notes, numBars, audio) {
+    Tone.Transport.bpm.value = bpm;
+    this.notesToEvents([])
     // simple check to avoid double play
     if (this.started) return;
-    var player = new Tone.Player('https://cdn.jsdelivr.net/gh/R-D-D-D/Ground-Zero/web_frontend/src/resources/metronome_click.mp3');
-    player.toMaster();
+    this.started = true;
 
-    Tone.Transport.bpm.value = bpm;
     Tone.Context.latencyHint = 'fastest';
     const part = new Tone.Part((time) => {
       //the events will be given to the callback with the time they occur
@@ -97,54 +106,51 @@ const tone = {
         v.envelope.triggerAttackRelease('16n', time);
       });
       this.noise.triggerAttackRelease('16n', time);
-      }, [0, Tone.Time('4n'), 2 * Tone.Time('4n'), 3 * Tone.Time('4n')]
+      }, this.notesToEvents(notes)
     );
-    this.started = true;
 
-    part.start(0);
+    part.start('1m');
 
-    //loop the part 3 times
+    //loop the part 1 time
     part.loop = 1;
-    part.loopEnd = '1m';
+    var totalNumBars = numBars + "m";
 
-    Tone.Transport.schedule((time) => {
-      // recorder.stop();
-      console.log('stopped')
-      Tone.Transport.stop();
-      this.started = false;
-    }, "2m");
-
+    
     Tone.Transport.scheduleRepeat(() => {
-      console.log(player.loaded)
-      player.restart();
+      this.player.restart();
     }, "4n", "0m");
-
-    Tone.Transport.start();
 
     // var seq = new Tone.Sequence((time, note) => {
     //   this.player.get("click").start();
     // //straight quater notes
     // }, [1, 2, 3, 4, 5, 6, 7, 8], "8n");
     //start the Transport for the events to start
+
+    const actx  = Tone.context;
+    const dest  = actx.createMediaStreamDestination();
+    const recorder = new MediaRecorder(dest.stream);
+
+    this.lowPass.connect(dest);
+    this.poly.connect(dest);
+    this.player.connect(dest);
+  
+    const chunks = [];
+
+    recorder.ondataavailable = evt => chunks.push(evt.data);
+    recorder.onstop = evt => {
+      let blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
+      audio.src = URL.createObjectURL(blob);
+    };
+
     
-    console.log(Tone.Transport.bpm.value)
-    console.log(Tone.Time('1m').toSeconds())
+    Tone.Transport.schedule((time) => {
+      recorder.stop();
+      console.log('stopped')
+      Tone.Transport.stop();
+      this.started = false;
+    }, totalNumBars);
 
-    // const actx  = Tone.context;
-    // const dest  = actx.createMediaStreamDestination();
-    // const recorder = new MediaRecorder(dest.stream);
-
-    // // synth.connect(dest);
-  
-    // const chunks = [];
-
-  
-    // recorder.ondataavailable = evt => chunks.push(evt.data);
-    // recorder.onstop = evt => {
-    //   let blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
-    //   audio.src = URL.createObjectURL(blob);
-    // };
-
-    // recorder.start();
+    recorder.start();
+    Tone.Transport.start();
   }
 }
