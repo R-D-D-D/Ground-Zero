@@ -92,218 +92,17 @@ p {
   float: left;
   margin-right: 30px;
   font-size: 1.7em;
-  color: #fff;
   text-transform: uppercase;
   letter-spacing: -1px;
   font-weight: bold;
   &:hover {
-    color: #fff;
+    color: rgb(177, 169, 169);
     text-decoration: none;
   }
 }
 
 
-/* footer */
-
-footer {
-  margin-top: 45px;
-  padding-top: 5px;
-  border-top: 1px solid #eaeaea;
-  color: $gray-light;
-  a {
-    color: #555;
-    &:hover {
-      color: #222;
-    }
-  }
-  small {
-    float: left;
-  }
-  ul {
-    float: right;
-    list-style: none;
-    li {
-      float: left;
-      margin-left: 15px;
-    }
-  }
-}
-
-/* miscellaneous */
-
-.info-page {
-  h1, h2 {
-    text-align: left;
-  }
-  h2 {
-    line-height: 1.75;
-    letter-spacing: -0.5px;
-  }
-}
-
-.debug_dump {
-  clear: both;
-  float: left;
-  width: 100%;
-  margin-top: 45px;
-}
-
-/* gravatar */
-
-.gravatar_profile {
-  .gravatar {
-    margin-top: 10px;
-  }
-}
-
-.gravatar_edit {
-  margin-bottom: 15px;
-}
-
-.stats {
-  overflow: auto;
-  a {
-    color: black;
-    &:hover {
-      text-decoration: none;
-      color: blue;
-    }
-  }
-}
-
-.user_avatars {
-  overflow: auto;
-  margin-top: 10px;
-  .gravatar {
-    margin: 1px 1px;
-  }
-  a {
-    padding: 0;
-  }
-}
-
-
-.checkbox {
-  margin-top: -10px;
-  margin-bottom: 10px;
-  span {
-    margin-left: 20px;
-    font-weight: normal;
-  }
-}
-
-.remember_me {
-  #session_remember_me {
-    width: auto;
-    margin-left: 0;
-    margin-top: 7px;
-  }
-  label {
-    font-weight: normal;
-  }
-}
-
-/* user profile */
-
-.profile_heading {
-  a {
-    color: $gray;
-    font-size: 0.5em;
-    letter-spacing: -0.75px;
-  }
-}
-
-.user_profile {
-  margin-bottom: 10px;
-  .tutor-profile, .student-profile {
-    h2 {
-      color: $gray;
-    }
-    .tutor-gravatar, .student-gravatar {
-      img {
-        margin-bottom: 5px;
-      }
-    }
-  }
-}
-
-.user_courses {
-  .sort .dropdown {
-    float: right;
-  }
-}
-
-.edit_student {
-  .form-check .form-check-input {
-    margin-top: 7px;
-  }
-}
-
 /* course info */
-
-.btn-course-new {
-  margin-bottom: 15px;
-}
-
-.course-card {
-  .card-img-top {
-    width: 100%;
-    height: 10vw;
-    object-fit: cover;
-  }
-
-  .badges {
-    margin: 5px 0px -15px 15px;
-    .badge {
-      margin-bottom: 5px;
-    }
-  }
-  .title, .tutor, .price, .rating, .students {
-    display: block;
-  }
-  .title {
-    margin-top: 0px;
-    a {
-      color: $gray-dark;
-      &:hover, &:focus {
-        text-decoration: none;
-      }
-    }
-  }
-  .price {
-    margin: 10px 0px 0px 0px;
-  }
-  .rating {
-    margin-top: -2px;
-    margin-bottom: 5px;
-  }
-}
-
-.course-index-title, .course-index-none {
-  margin: 20px 0px;
-  text-align: left;
-}
-
-.courses-heading {
-  font-size: 1.6em;
-}
-
-.courses-collection {
-  margin-bottom: 20px;
-  .heading {
-    font-size: 1.6em;
-  }
-}
-
-.course-lessons-nav-tabs {
-  .nav-tabs {
-    position: fixed;
-    z-index: 9;
-    background-color: #ffffff;
-    padding: 20px 950px 0px 0px;
-    margin-top: -1.5%;
-  }
-}
 
 @media only screen and (max-width: 1200px) {
   #course-lessons-tabs {
@@ -317,16 +116,10 @@ footer {
   }
 }
 
-
-
-
 /* home page */
 
 .home-bg {
-  background: linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, .3)), url('resources/home_splash.jpg') center no-repeat;
-  background-color: black;
   height: 100vh;
-  background-size: cover;
   overflow: hidden;
   .home-flash {
     margin-top: -3%;
@@ -363,11 +156,8 @@ footer {
 }
 
 .home-student-bg {
-  background: linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, .3)), url('resources/dark_bg.jpg') center no-repeat;
-  background-color: black;
-  background-size: cover;
-  overflow: hidden;
-  height: 800vh;
+  overflow: auto;
+  height: 100vh;
   .home-flash {
     margin-top: -1%;
     margin-bottom: -10%;
@@ -375,10 +165,10 @@ footer {
   .home-text {
     margin-top: 10%;
     h1, h3 {
-      text-shadow: 2px 2px 4px black;
+      text-shadow: 2px 2px 4px $gray-light;
     }
     h2 {
-      text-shadow: 1px 1px 4px black;
+      text-shadow: 1px 1px 4px $gray-light;
     }
     a {
       color: $gray-lighter;
@@ -421,10 +211,6 @@ footer {
   #home-text {
     margin-top: 0px;
   }
-}
-
-#home-nav {
-  background: transparent !important;
 }
 
 

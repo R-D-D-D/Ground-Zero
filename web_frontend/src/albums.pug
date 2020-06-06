@@ -2,28 +2,28 @@ vtemplate#v-list
   .container-fluid.home-bg
     .row.mb-5
       .col
-        nav#home-nav.navbar.navbar-expand-lg.navbar-dark
-          a#logo(href='#') MUSIC ACADEMY
+        nav#home-nav.navbar.navbar-expand-lg.navbar-light.bg-light
+          a#logo.text-dark(href='#') MUSIC ACADEMY
             button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
               span.navbar-toggler-icon
             #navbarSupportedContent.collapse.navbar-collapse
               ul.navbar-nav.ml-auto
                 li.nav-item.active
                   //- router-link.nav-link.text-light(to="/") Home
-                  a.nav-link.text-light(href='#') Home
+                  a.nav-link.text-dark(href='#') Home
                 li.nav-item
-                  a.nav-link.text-light(href='#') About
+                  a.nav-link.text-dark(href='#') About
     .home-text.row
       .col.offset-md-1.mt-4
-        h3.text-light.text-left.mb-2(style='margin-top:1%;')
+        h3.text-dark.text-left.mb-2(style='margin-top:1%;')
           | Welcome to
-        h1.text-light.text-left
+        h1.text-dark.text-left
           | The Music Academy
     .row.justify-content-around
       .col-6.mt-4.text-center
-        router-link.btn.btn-outline-light.btn-lg(to="/student") Use as Student
+        router-link.btn.btn-outline-dark.btn-lg(to="/student") Use as Student
       .col-6.mt-4.text-center
-        router-link.btn.btn-outline-light.btn-lg(to="/tutor") Use as Tutor
+        router-link.btn.btn-outline-dark.btn-lg(to="/tutor") Use as Tutor
 
 script.
   comps.load("v-list")
