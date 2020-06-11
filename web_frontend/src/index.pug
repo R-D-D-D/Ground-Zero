@@ -9,12 +9,18 @@ html
     script(src="https://unpkg.com/vuex/dist/vuex.min.js")
     script(src="https://unpkg.com/vue-router/dist/vue-router.min.js")
     script(src="https://unpkg.com/tone@13.8.25/build/Tone.js")
-    script(src="https://unpkg.com/vexflow/releases/vexflow-min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/vexflow/3.0.9/vexflow-debug.js")
 
-    script(src="util.js")
-    script(src="api.js")
-    script(src="store.js")
-    script(src="tone.js")
+    script(src="javascript/util.js")
+    script(src="javascript/api.js")
+    script(src="javascript/store.js")
+    script(src="javascript/tone.js")
+    script(src="javascript/vexflow_ui.js")
+    script(src="javascript/handler.js")
+    script(src="javascript/mouse_listener.js")
+    script(src="javascript/vexflow_extension.js")
+    script(src="javascript/constants.js")
+    script(src="javascript/notemap.js")
 
     link(href="style.css", rel="stylesheet")
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
@@ -33,5 +39,5 @@ html
     include student
     include tutor
 
-    script(src="app.js")
+    script(src="javascript/app.js")
 

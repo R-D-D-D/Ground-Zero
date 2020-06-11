@@ -93,13 +93,13 @@ const tone = {
 
   createAndRecordSequence(bpm, notes, numBars, audio) {
     Tone.Transport.bpm.value = bpm;
-    this.notesToEvents([])
+    this.notesToEvents(notes)
     // simple check to avoid double play
     if (this.started) return;
     this.started = true;
 
     Tone.Context.latencyHint = 'fastest';
-    const part = new Tone.Part((time) => {
+    const part = new Tone.Part( m => {
       //the events will be given to the callback with the time they occur
       this.poly.voices.forEach((v, i) => {
         this.freqEnv[i].triggerAttackRelease('16n', time);
