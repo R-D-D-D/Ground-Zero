@@ -48,8 +48,8 @@ Vex.UI.Handler = function (containerId, options){
 	this.noteMenu = new Vex.UI.NoteMenu(this, this.canvas, this.ctx);
 	this.noteMenu.init();
 	
-	// this.tipRenderer = new Vex.UI.TipRenderer(this.canvas);
-	// this.tipRenderer.init();
+	this.tipRenderer = new Vex.UI.TipRenderer(this.canvas);
+	this.tipRenderer.init();
 	
 	// this.player = new Vex.UI.Player(this, this.staveList);
 };
@@ -77,7 +77,7 @@ Vex.UI.Handler.prototype.createStaves = function() {
       size: 12,
       weight: '',
 		};
-		stave.addClef("treble");
+		stave.addClef("treble").addTimeSignature("4/4");;
 		staveList.push(stave);
 		stave.setContext(this.ctx);
 		//Initially empty -> No Notes
@@ -114,12 +114,15 @@ Vex.UI.Handler.prototype.redrawStave = function(stave){
 	//get stave bounding box
 	var box = stave.getBoundingBox();
 	//TODO The +12 and +5 values are to erase part of a note that could be out of the bounding box. This values shouldn't be absolut. FIX!	
-	//this.ctx.clearRect(box.getX() - 12, box.getY() - 5, box.getW() + 12, box.getH() + 5);
-	this.ctx.clear();
+	// this.ctx.clear();
+	// this.drawStaves();
+	// for(var i = 0; i < this.staveList.length; i++){
+	// 	this.drawNotes(this.staveList[i]);
+	// }
+
+	this.ctx.clearRect(box.getX() - 12, box.getY(), box.getW() * 1.5, box.getH() + 5);
 	this.drawStaves();
-	for(var i = 0; i < this.staveList.length; i++){
-		this.drawNotes(this.staveList[i]);
-	}
+	this.drawNotes(stave);
 };
 
 Vex.UI.Handler.prototype.drawStaves = function(){
@@ -154,12 +157,13 @@ Vex.UI.Handler.prototype.drawNotes = function(stave){
 Vex.UI.Handler.prototype.drawBeams = function(stave){
 	// for(var i = 0; i < stave.getBeams().length; i++){
 	// 	stave.getBeams()[i].setContext(this.ctx).draw();
-  // }
-	// var beams = Vex.Flow.Beam.generateBeams(notes);
+	// }
+	
+	var beams = Vex.Flow.Beam.generateBeams(stave.getTickables());
 
-	// beams.forEach(function(beam) {
-	// 	beam.setContext(context).draw();
-	// });
+	for (var i = 0; i < beams.length; i ++) {
+		beams[i].setContext(this.ctx).draw();
+	}
 };
 
 
@@ -260,9 +264,7 @@ Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 				// barline.setX(mousePos.x 
 				// 	- this.currentStave.getNoteStartX() 
 				// 	- this.provisoryTickable.render_options.stave_padding);
-				barline.setX(mousePos.x 
-					- this.currentStave.getNoteStartX()
-					- 5);
+				barline.setX(mousePos.x);
 				barline.draw(this.currentStave);
 			} else {
 				this.provisoryTickable.getTickContext().setX(
@@ -293,3 +295,91 @@ Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 	
 	
 };
+
+// Menu management
+Vex.UI.Handler.prototype.openMenuForKey = function(keyName, mousePos){
+	//We will open a new Menu: stop listening to the StaveMouseListener
+	this.mouseListener.stopListening();
+	this.noteMenu.setNote(this.currentNote);
+	this.noteMenu.setKeyIndex(this.currentNote.indexOfKey(keyName));
+	this.noteMenu.open(mousePos);
+};
+
+/**
+ * This method is called by NoteMenu on close()
+ */
+Vex.UI.Handler.prototype.noteMenuClosed = function(){
+	//Redraw the whole canvas
+	this.redraw();
+	//Resume listening the the mouse
+	this.mouseListener.startListening();
+};
+
+Vex.UI.Handler.prototype.addAccidentalToNote = function(name, note, index){
+	if(index === undefined || index == -1)
+		index = 0;
+	
+	var accidental = new Vex.Flow.Accidental(name);
+	note.addAccidental(index, accidental);
+};
+
+//Dots were moving up when the key is over a line. between lines works fine.
+//Error provoked by modifiercontext.js on line 356 (or vexflow-min.js line 4007)
+//Changed the line on min.js to stop shifting the dot when over a line to avoid the problem.
+Vex.UI.Handler.prototype.addDotToNote = function(note){
+	if (note.dots == 0) 
+		note.addDotToAll();
+};
+
+//TODO Only create a new beam with next note if there isnt a beam already. Otherwise, merge beam or add note to beam.
+Vex.UI.Handler.prototype.beamWithNextNote = function(note){
+	var nextNote = this.currentStave.getNextNote(note);
+	
+	if(nextNote != null) {
+		//Set the note array
+		
+		notes = [note, nextNote];
+		
+		nextNote.setStemDirection(note.getStemDirection());
+		//Create beam
+		var beam = new Vex.Flow.Beam(notes);
+		
+		this.currentStave.pushBeam(beam);
+	}
+};
+
+Vex.UI.Handler.prototype.deleteNote = function(note){
+	for(var i = 0; i < this.staveList.length; i++){
+		var notes = this.staveList[i].getNotes();
+		var referenceIndex = notes.indexOf(note);
+
+		if(referenceIndex > -1){
+			this.staveList[i].removeTickable(note);
+		}
+	}
+};
+
+Vex.UI.Handler.prototype.exportNotes = function() {
+	result = [];
+	for(var i = 0; i < this.staveList.length; i++){
+		for(var j = 0; j < this.staveList[i].getTickables().length; j++){
+			var note = this.staveList[i].getTickables()[j];
+			if (note instanceof Vex.Flow.StaveNote) {
+				var dur = note.duration;
+				var key = note.keys[0];
+				var dot = note.dots;
+				var noteType = note.noteType;
+				var temp = key + "/" + dur;
+				if (noteType == "r") {
+					temp += "r";
+				}
+				if (dot == 1) {
+					temp += "d";
+				}
+				result.push(temp);
+			}
+		}
+	}
+	return result;
+}
+

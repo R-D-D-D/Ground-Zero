@@ -140,7 +140,11 @@ script.
       this.$on('play_and_record_sequence', () => {
         const audio = document.getElementById('solution-audio');
         tone.init(true);
-        tone.createAndRecordSequence(60, ["c/5/16", "c/5/16", "c/5/8", "c/5/8d", "c/5/16", "c/5/qr", "c/5/16", "c/5/16", "c/5/16r", "c/5/16"], 2, audio);
+        tone.createAndRecordSequence(60, this.handler.exportNotes(), 2, audio);
+      });
+
+      this.$on('play_sequence', () => {
+        console.log(this.handler.exportNotes());
       })
     }
   })

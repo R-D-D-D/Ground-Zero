@@ -24,6 +24,9 @@ Vex.UI.MouseListener.prototype.handleEvent = function(evt){
 		case "contextmenu":
 			this.handleRightMouseClick(evt);
 			break;
+		case "mouseleave":
+			this.handleMouseLeave(evt);
+			break;
 	}
 };
 
@@ -32,6 +35,7 @@ Vex.UI.MouseListener.prototype.startListening = function(){
 	this.canvas.addEventListener('mousemove', this, false);
 	this.canvas.addEventListener('wheel', this, false);
 	this.canvas.addEventListener('contextmenu', this, false);
+	this.canvas.addEventListener("mouseleave", this, false);
 };
 
 Vex.UI.MouseListener.prototype.stopListening = function(){
@@ -39,11 +43,22 @@ Vex.UI.MouseListener.prototype.stopListening = function(){
 	this.canvas.removeEventListener('mousemove', this, false);
 	this.canvas.removeEventListener('wheel', this, false);
 	this.canvas.removeEventListener('contextmenu', this, false);
+	this.canvas.removeEventListener("mouseleave", this, false);
 };
+
+Vex.UI.MouseListener.prototype.handleMouseLeave = function(evt){
+	for(var i = 0; i < this.staveList.length; i++){
+		this.handler.redrawStave(this.staveList[i]);
+	}
+}
 
 Vex.UI.MouseListener.prototype.handleMouseOver = function(evt){
 	var mousePos = getMousePositionInCanvas(this.canvas, evt);
-    this.handler.currentStave = findWhichStaveMouseOver(this.staveList, mousePos);
+		var temp = findWhichStaveMouseOver(this.staveList, mousePos);
+		if (temp && this.handler.currentStave && temp != this.handler.currentStave) {
+			this.handler.redrawStave(this.handler.currentStave);
+		}
+		this.handler.currentStave = temp;
     this.handler.currentNote = findWhichNoteMouseOver(this.handler.currentStave, mousePos);
     this.handler.updateProvisoryKey(mousePos);
     //change color of currentNote
@@ -94,8 +109,7 @@ Vex.UI.MouseListener.prototype.handleMouseClick = function(evt){
     	this.handleMiddleMouseClick(evt);
         break;
     case 3:
-    	//Event being handled by contextMenu
-    	//this.handleRightMouseClick(evt);
+    	  //this.handleRightMouseClick(evt);
         break;
     default:
         alert('You have a strange Mouse!');

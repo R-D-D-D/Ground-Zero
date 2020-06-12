@@ -87,7 +87,7 @@ namespace WaveformGenerator
                     case "h":
                         ans = 2f;
                         break;
-                    case "f":
+                    case "w":
                         ans = 1f;
                         break;
                     default:

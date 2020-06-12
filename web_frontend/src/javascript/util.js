@@ -47,6 +47,19 @@ function getMousePositionInCanvas(canvas, evt) {
 	};
 };
 
+function getAbsoluteMousePositionInCanvas(canvas, evt) {
+	//pegando apenas os valores de border e padding (eliminando coisas como cor e caracteres de pixel 'px'
+	var border = getStyle(canvas.id, 'border-left-width');
+	var borderValue = border!=null?border.substring(0, border.indexOf(border.match(/\D/))):0;
+	var padding = getStyle(canvas.id, 'padding-left');
+	var paddingValue = padding!=null?padding.substring(0, padding.indexOf(padding.match(/\D/))):0;
+	var rect = canvas.getBoundingClientRect();
+	return {
+		x: (evt.clientX - rect.left - borderValue - paddingValue),
+		y: (evt.clientY - rect.top - borderValue - paddingValue),
+	};
+};
+
 
 function isCursorWithinRectangle(x, y, width, height, mouseX, mouseY) {
     if(mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
