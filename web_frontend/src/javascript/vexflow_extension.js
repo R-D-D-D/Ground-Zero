@@ -375,14 +375,14 @@ Vex.Flow.StaveNote.prototype.drawFlag = function(){
 
 		if (this.getStemDirection() === Vex.Flow.Stem.DOWN) {
 			// Down stems have flags on the left.
-			flag_x = x_begin + 1;
-			flag_y = bounds.y_top - note_stem_height + 2;
+			flag_x = x_begin;
+			flag_y = bounds.y_top - note_stem_height;
 			flag_code = glyph.code_flag_downstem;
 
 		} else {
 			// Up stems have flags on the left.
-			flag_x = x_end + 1;
-			flag_y = bounds.y_bottom - note_stem_height - 2;
+			flag_x = x_end;
+			flag_y = bounds.y_bottom - note_stem_height;
 			flag_code = glyph.code_flag_upstem;
 		}
 
@@ -391,15 +391,18 @@ Vex.Flow.StaveNote.prototype.drawFlag = function(){
 		ctx.fillStyle = this.note_heads[0].style.fillStyle;
 		
 		// Draw the Flag
-		Vex.Flow.renderGlyph(ctx, flag_x, flag_y,
-				this.render_options.glyph_font_scale, flag_code);
+		ctx.openGroup('flag', null, { pointerBBox: true });
+		this.applyStyle(ctx, this.getFlagStyle() || false);
+		this.flag.render(ctx, flag_x, flag_y);
+		this.restoreStyle(ctx, this.getFlagStyle() || false);
+		ctx.closeGroup();
 
 		//NOTE: The 2 lines below were added to the original code
 		//Reverting style
 		ctx.fillStyle = ctxFillStyle;
 	}
 };
-
+	
 
 /*
  * Vex.Flow.Dot extensions

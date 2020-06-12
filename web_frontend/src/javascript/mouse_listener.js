@@ -69,14 +69,16 @@ Vex.UI.MouseListener.prototype.handleMouseOver = function(evt){
 			noteList = currentStave.getTickables();
 		
 		for(var i = 0; i < noteList.length; i++){
-			//return to default color. Unnecessary if currentNote does not change color
-			if(noteList[i].setHighlight !== undefined)
-				noteList[i].setHighlight(false);
-			var noteBox = noteList[i].getBoundingBox();
-			var staveBox = currentStave.getBoundingBox();
-			//Use the Notes X and the Stave's Y for the bounding box 
-			if(isCursorWithinRectangle(noteBox.getX(), staveBox.getY(), noteBox.getW(), staveBox.getH(), mousePos.x, mousePos.y))
-				return noteList[i];
+			if (noteList[i] instanceof Vex.Flow.StaveNote) {
+				//return to default color. Unnecessary if currentNote does not change color
+				if(noteList[i].setHighlight !== undefined)
+					noteList[i].setHighlight(false);
+				var noteBox = noteList[i].getBoundingBox();
+				var staveBox = currentStave.getBoundingBox();
+				//Use the Notes X and the Stave's Y for the bounding box 
+				if(isCursorWithinRectangle(noteBox.getX(), staveBox.getY(), noteBox.getW(), staveBox.getH(), mousePos.x, mousePos.y))
+					return noteList[i];
+			}
 		}
 		return null;
 	}
@@ -225,12 +227,9 @@ Vex.UI.MouseListener.prototype.handleMiddleMouseClick = function(evt){
 		else
 			newType = Vex.UI.TickableType.BAR;
 	} else if (tickable instanceof Vex.Flow.BarNote)
-		newType = Vex.UI.TickableType.CLEF;
-	else if(tickable instanceof Vex.Flow.ClefNote)
 		newType = Vex.UI.TickableType.NOTE;
 	
 	this.handler.updateProvisoryType(newType);
-	
 };
 
 

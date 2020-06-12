@@ -5,6 +5,7 @@
 Vex.UI.provisoryTickableStyle = {shadowBlur:0, shadowColor:'gray', fillStyle:'gray', strokeStyle:'gray'}; 
 Vex.UI.highlightNoteStyle = {shadowBlur:15, shadowColor:'red', fillStyle:'black', strokeStyle:'black'};
 Vex.UI.defaultNoteStyle = {shadowBlur:0, shadowColor:'black', fillStyle:'black', strokeStyle:'black'};
+Vex.UI.scale = 1.5;
 
 Vex.UI.Handler = function (containerId, options){
 	this.container = document.getElementById(containerId);
@@ -16,11 +17,11 @@ Vex.UI.Handler = function (containerId, options){
 		canAddStaves: true,
 		canChangeNoteValue: true,
 		showToolbar: true,
-		numberOfStaves: 1,
+		numberOfStaves: 2,
 		canvasProperties: {
 			id: containerId + "-canvas",
-			width: 625,
-			height: 160,
+			width: 1225,
+			height: 320,
 			tabindex: 1
 		}
 	};
@@ -30,6 +31,7 @@ Vex.UI.Handler = function (containerId, options){
 	this.renderer = new Vex.Flow.Renderer(this.canvas, Vex.Flow.Renderer.Backends.CANVAS);
 	this.ctx = this.renderer.getContext();
 	this.staveList = this.createStaves();
+	//this.ctx.scale(1.5, 1.5);
 
 	// if(this.options.showToolbar)
 	// 	this.toolbar = new Vex.UI.Toolbar(this);
@@ -69,13 +71,19 @@ Vex.UI.Handler.prototype.createStaves = function() {
 	var yPosition = 0;
 	for(var i = 0; i < this.options.numberOfStaves; i++){
 		//TODO make stave position more dinamic
-		var stave = new Vex.Flow.Stave(10, yPosition , 600);
+		var stave = new Vex.Flow.Stave(10, yPosition, 600);
+		stave.font = {
+      family: 'sans-serif',
+      size: 12,
+      weight: '',
+		};
+		stave.addClef("treble");
 		staveList.push(stave);
 		stave.setContext(this.ctx);
 		//Initially empty -> No Notes
 		//TODO make it able to load notes
 		stave.setTickables([]);
-		yPosition += stave.height;
+		yPosition += (stave.height * 1.2);
 	}
 
 	return staveList;
@@ -106,9 +114,12 @@ Vex.UI.Handler.prototype.redrawStave = function(stave){
 	//get stave bounding box
 	var box = stave.getBoundingBox();
 	//TODO The +12 and +5 values are to erase part of a note that could be out of the bounding box. This values shouldn't be absolut. FIX!	
-	this.ctx.clearRect(box.getX(), box.getY(), box.getW() + 12, box.getH() + 5);
-	stave.draw();
-	this.drawNotes(stave);
+	//this.ctx.clearRect(box.getX() - 12, box.getY() - 5, box.getW() + 12, box.getH() + 5);
+	this.ctx.clear();
+	this.drawStaves();
+	for(var i = 0; i < this.staveList.length; i++){
+		this.drawNotes(this.staveList[i]);
+	}
 };
 
 Vex.UI.Handler.prototype.drawStaves = function(){
@@ -163,7 +174,6 @@ Vex.UI.Handler.prototype.updateProvisoryKey = function(mousePos){
 	if(this.currentStave!=null){
 		if(!(this.provisoryTickable instanceof Vex.Flow.StaveNote) || this.provisoryTickable.noteType == "r"){
 			//No need to update key if its not a note or if its a rest, just draw the tickable in the new mouse position
-			
 		}
 		else{
 			var noteName = NoteMap.getNoteName(this.currentStave, mousePos);
@@ -245,12 +255,21 @@ Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 				this.provisoryTickable.x_shift= mousePos.x - this.provisoryTickable.getAbsoluteX() - 5;
 
 
-			}else{// if(this.provisoryTickable instanceof Vex.Flow.BarNote){
+			}else if (this.provisoryTickable instanceof Vex.Flow.BarNote){// if(this.provisoryTickable instanceof Vex.Flow.BarNote){
+				const barline = new Vex.Flow.Barline(1);
+				// barline.setX(mousePos.x 
+				// 	- this.currentStave.getNoteStartX() 
+				// 	- this.provisoryTickable.render_options.stave_padding);
+				barline.setX(mousePos.x 
+					- this.currentStave.getNoteStartX()
+					- 5);
+				barline.draw(this.currentStave);
+			} else {
 				this.provisoryTickable.getTickContext().setX(
-						mousePos.x 
-						- this.currentStave.getNoteStartX() 
-						- this.provisoryTickable.render_options.stave_padding
-						);
+					mousePos.x 
+					- this.currentStave.getNoteStartX()
+					- this.provisoryTickable.render_options.stave_padding
+					);
 			}
 		}
 		//Only draw Provisory note if not on a definitive note
@@ -260,7 +279,11 @@ Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 			this.ctx.fillStyle = 'gray';
 			this.ctx.strokeStyle = 'gray';
 
-			this.provisoryTickable.draw();
+			if (this.provisoryTickable instanceof Vex.Flow.BarNote) {
+				//this.provisoryTickable.draw();
+			} else {
+				this.provisoryTickable.draw();
+			}
 
 			this.ctx.fillStyle = tempFillStyle;
 			this.ctx.strokeStyle = tempStrokeStyle;
