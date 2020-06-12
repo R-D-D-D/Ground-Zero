@@ -45,8 +45,8 @@ Vex.UI.Handler = function (containerId, options){
 	
 	// this.keyboardListener = new Vex.UI.KeyboardListener(this, this.canvas, this.staveList);
 	
-	// this.noteMenu = new Vex.UI.NoteMenu(this, this.canvas, this.ctx);
-	// this.noteMenu.init();
+	this.noteMenu = new Vex.UI.NoteMenu(this, this.canvas, this.ctx);
+	this.noteMenu.init();
 	
 	// this.tipRenderer = new Vex.UI.TipRenderer(this.canvas);
 	// this.tipRenderer.init();
