@@ -31,7 +31,7 @@ Vex.UI.Handler = function (containerId, options){
 	this.renderer = new Vex.Flow.Renderer(this.canvas, Vex.Flow.Renderer.Backends.CANVAS);
 	this.ctx = this.renderer.getContext();
 	this.staveList = this.createStaves();
-	//this.ctx.scale(1.5, 1.5);
+	this.ctx.scale(1.5, 1.5);
 
 	// if(this.options.showToolbar)
 	// 	this.toolbar = new Vex.UI.Toolbar(this);
@@ -71,7 +71,7 @@ Vex.UI.Handler.prototype.createStaves = function() {
 	var yPosition = 0;
 	for(var i = 0; i < this.options.numberOfStaves; i++){
 		//TODO make stave position more dinamic
-		var stave = new Vex.Flow.Stave(10, yPosition, 600);
+		var stave = new Vex.Flow.Stave(10, yPosition, 800);
 		stave.font = {
       family: 'sans-serif',
       size: 12,

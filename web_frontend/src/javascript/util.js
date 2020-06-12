@@ -42,8 +42,8 @@ function getMousePositionInCanvas(canvas, evt) {
 	var paddingValue = padding!=null?padding.substring(0, padding.indexOf(padding.match(/\D/))):0;
 	var rect = canvas.getBoundingClientRect();
 	return {
-		x: evt.clientX - rect.left - borderValue - paddingValue,
-		y: evt.clientY - rect.top - borderValue - paddingValue,
+		x: (evt.clientX - rect.left - borderValue - paddingValue) / Vex.UI.scale,
+		y: (evt.clientY - rect.top - borderValue - paddingValue) / Vex.UI.scale,
 	};
 };
 
