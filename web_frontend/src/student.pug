@@ -139,7 +139,7 @@ script.
 
       this.$on('play_and_record_sequence', () => {
         const audio = document.getElementById('solution-audio');
-        tone.init(true);
+        tone.init();
         tone.createAndRecordSequence(60, this.handler.exportNotes(), 2, audio);
       });
 

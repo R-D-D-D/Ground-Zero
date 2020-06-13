@@ -8,6 +8,8 @@
 
 Vex.Flow.Stave.prototype.tickables = [];
 
+Vex.Flow.Stave.prototype.beams = [];
+
 Vex.Flow.Stave.prototype.setTickables = function(tickables) {
 	this.tickables = tickables;
 };

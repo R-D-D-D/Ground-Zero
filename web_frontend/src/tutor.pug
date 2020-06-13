@@ -3,56 +3,36 @@ vtemplate#v-tutor
       .row.mb-5
         .col
           nav#home-nav.navbar.navbar-expand-lg.navbar-dark
-            a#logo(href='#') MUSIC ACADEMY
+            a#logo.text-dark(href='#') MUSIC ACADEMY
               button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
                 span.navbar-toggler-icon
               #navbarSupportedContent.collapse.navbar-collapse
                 ul.navbar-nav.ml-auto
                   li.nav-item.active
-                    a.nav-link.text-light(href='#') Home
+                    a.nav-link.text-dark(href='#') Home
                   li.nav-item
-                    a.nav-link.text-light(href='#') About
+                    a.nav-link.text-dark(href='#') About
       .row.mt-5.mb-5.justify-content-center
-        .col-3
-          button.btn.btn-outline-light.btn-lg(v-on:click="$emit('play_sequence')") Play Sequence
-      .row.mt-5.mb-5
-        .col-2
-          .p
-        .col-2
-          .p.border.square.text-center(v-bind:class="{ inactive: is_one_inactive }")
-            img.p-2(v-bind:src="box_one_img")
-        .col-2
-          .p.border.square.text-center(v-bind:class="{ inactive: is_two_inactive }")
-            img.p-2(v-bind:src="box_two_img")
-        .col-2
-          .p.border.square.text-center(v-bind:class="{ inactive: is_three_inactive }")
-            img.p-2(v-bind:src="box_three_img")
-        .col-2
-          .p.border.square.text-center(v-bind:class="{ inactive: is_four_inactive }")
-            img.p-2(v-bind:src="box_four_img")
-        .col-2
-          .p
-      .row.mt-5
-        .col-2
-          .p
-        .col-2
-          select.btn.btn-outline-light(v-model="selected_one" v-on:change="$emit('update_display')")
-            option(disabled value="") Select a note
-            option(v-for="option in options") {{ option }}
-        .col-2
-          select.btn.btn-outline-light(v-model="selected_two" v-on:change="$emit('update_display')")
-            option(disabled value="") Select a note
-            option(v-for="option in options") {{ option }}
-        .col-2
-          select.btn.btn-outline-light(v-model="selected_three" v-on:change="$emit('update_display')")
-            option(disabled value="") Select a note
-            option(v-for="option in options") {{ option }}
-        .col-2
-          select.btn.btn-outline-light(v-model="selected_four" v-on:change="$emit('update_display')")
-            option(disabled value="") Select a note
-            option(v-for="option in options") {{ option }}
-        .col-2
-          .p
+        .col-6.text-right.pr-5
+          button.btn.btn-outline-dark.btn-lg(v-on:click="$emit('play_sequence')") Play Sequence
+        .col-6.text-left.pl-5
+          select.btn.btn-outline-dark.btn-lg(v-model="time_signature" v-on:change="$emit('change_time_signature')")
+            option(disabled selected) Time Signature
+            option 4/4
+            option 3/4
+            option 2/4
+            option 6/8
+            option 3/8
+      .row.m-0.p-0.justify-content-center
+        .col.m-0.p-0
+          #vexflow-wrapper.text-center
+      .row.justify-content-center.mt-3
+        .col-3.text-center
+          p.m-0.text-dark BPM: {{ bpm }}
+          input.w-100(type="range" class="custom-range" min="60" max="180" v-model="bpm")
+        .col-3.text-center
+          p.m-0.text-dark No. Bars: {{ num_of_bars }}
+          input.w-100(type="range" class="custom-range" min="1" max="4" v-model="num_of_bars")
   
 
 script.
@@ -60,76 +40,22 @@ script.
   comps.update('v-tutor', {
     data() {
       return {
-        selected_one: '',
-        selected_two: '',
-        selected_three: '',
-        selected_four: '',
-        options: ['quaver', 'semi_quaver', 'triplets', 'rest'],
-        box_one_img: 'resources/transparent.png',
-        box_two_img: 'resources/transparent.png',
-        box_three_img: 'resources/transparent.png',
-        box_four_img: 'resources/transparent.png',
-        is_one_inactive: true,
-        is_two_inactive: true,
-        is_three_inactive: true,
-        is_four_inactive: true
+        time_signature: 'Time Signature',
+        handler: {},
+        bpm: 60,
+        num_of_bars: 4,
       };
     },
-    created() {
-      this.$on('update_display', () => {
-        if (!(this.selected_one === '')) {
-          //- console.log(`resources/${this.selected_one}.png`)
-          this.box_one_img = `resources/${this.selected_one}.png`;
-        }
-        if (!(this.selected_two === '')) {
-          this.box_two_img = `resources/${this.selected_two}.png`;
-        }
-        if (!(this.selected_three === '')) {
-          this.box_three_img = `resources/${this.selected_three}.png`;
-        }
-        if (!(this.selected_four === '')) {
-          this.box_four_img = `resources/${this.selected_four}.png`;
-        }
-      })
+    mounted() {
+      this.handler = new Vex.UI.Handler("vexflow-wrapper").init();
 
       this.$on('play_sequence', () => {
-        if (this.selected_one === '' || this.selected_two === '' || this.selected_three === '' || this.selected_four === '') {
-          return
-        } else {
-          var audio = new Audio()
-          audio_files = [`resources/${this.selected_one}.wav`, `resources/${this.selected_two}.wav`, `resources/${this.selected_three}.wav`, `resources/${this.selected_four}.wav`]
-          var index = 0;
-          audio.src=`resources/${this.selected_one}.wav`;
-          this.is_one_inactive = false;
-          audio.play();
-          index++;
+        tone.init();
+        tone.playSequence(this.bpm, this.handler.exportNotes(), parseInt(this.num_of_bars) + 1);
+      });
 
-          audio.onended = () => {
-              if (index < 4) {
-                  switch(index) {
-                    case 1:
-                      this.is_one_inactive = true;
-                      this.is_two_inactive = false;
-                      break;
-                    case 2:
-                      this.is_two_inactive = true;
-                      this.is_three_inactive = false;
-                      break;
-                    case 3:
-                      this.is_three_inactive = true;
-                      this.is_four_inactive = false;
-                      break;
-                    default:
-                      // code block
-                  }
-                  audio.src=audio_files[index];
-                  audio.play();
-                  index++;
-              } else {
-                this.is_four_inactive = true;
-              }
-          };
-        }
-      })
+      this.$on('change_time_signature', () => {
+        this.handler.setTimeSignature(this.time_signature);
+      });
     }
   })

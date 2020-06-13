@@ -182,6 +182,8 @@ const tone = {
   freqEnv: [],
   started: false,
   player: null,
+  started: false,
+  initiated: false,
 
   notesToEvents(notes) {
     var result = [];
@@ -210,7 +212,10 @@ const tone = {
     return result;
   },
 
-  init(play) {
+  init() {
+    if (this.initiated) 
+      return
+    this.initiated = true;
     this.poly.voices.forEach((v, i) => {
       const env = new Tone.FrequencyEnvelope({
         attack: 0.001,
@@ -233,7 +238,11 @@ const tone = {
     }
   },
 
-  createAndRecordSequence(bpm, notes, numBars, audio) {
+  playSequence(bpm, notes, numBars) {
+    this.createAndRecordSequence(bpm, notes, numBars, undefined, true);
+  },
+
+  createAndRecordSequence(bpm, notes, numBars, audio, noRecord) {
     Tone.Transport.bpm.value = bpm;
     this.notesToEvents([])
     // simple check to avoid double play
@@ -256,7 +265,6 @@ const tone = {
     //loop the part 1 time
     part.loop = 1;
     var totalNumBars = numBars + "m";
-
     
     Tone.Transport.scheduleRepeat(() => {
       this.player.restart();
@@ -268,31 +276,40 @@ const tone = {
     // }, [1, 2, 3, 4, 5, 6, 7, 8], "8n");
     //start the Transport for the events to start
 
-    const actx  = Tone.context;
-    const dest  = actx.createMediaStreamDestination();
-    const recorder = new MediaRecorder(dest.stream);
-
-    this.lowPass.connect(dest);
-    this.poly.connect(dest);
-    this.player.connect(dest);
+    if (!noRecord) {
+      const actx  = Tone.context;
+      const dest  = actx.createMediaStreamDestination();
+      const recorder = new MediaRecorder(dest.stream);
   
-    const chunks = [];
-
-    recorder.ondataavailable = evt => chunks.push(evt.data);
-    recorder.onstop = evt => {
-      let blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
-      audio.src = URL.createObjectURL(blob);
-    };
-
+      this.lowPass.connect(dest);
+      this.poly.connect(dest);
+      this.player.connect(dest);
     
-    Tone.Transport.schedule((time) => {
-      recorder.stop();
-      console.log('stopped')
-      Tone.Transport.stop();  
-      this.started = false;
-    }, totalNumBars);
+      const chunks = [];
+  
+      recorder.ondataavailable = evt => chunks.push(evt.data);
+      recorder.onstop = evt => {
+        let blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
+        audio.src = URL.createObjectURL(blob);
+      };
 
-    recorder.start();
-    Tone.Transport.start();
+      Tone.Transport.schedule((time) => {
+        recorder.stop();
+        console.log('stopped')
+        Tone.Transport.stop();  
+        this.started = false;
+      }, totalNumBars);
+  
+      recorder.start();
+      Tone.Transport.start();
+    } else {
+      Tone.Transport.schedule((time) => {
+        console.log('stopped')
+        Tone.Transport.stop();  
+        this.started = false;
+      }, totalNumBars);
+
+      Tone.Transport.start();
+    }
   }
 }

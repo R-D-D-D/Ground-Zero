@@ -77,7 +77,7 @@ Vex.UI.Handler.prototype.createStaves = function() {
       size: 12,
       weight: '',
 		};
-		stave.addClef("treble").addTimeSignature("4/4");;
+		stave.addClef("treble");
 		staveList.push(stave);
 		stave.setContext(this.ctx);
 		//Initially empty -> No Notes
@@ -104,10 +104,21 @@ Vex.UI.Handler.prototype.init = function() {
 	return this;
 };
 
-Vex.UI.Handler.prototype.redraw = function(){
+Vex.UI.Handler.prototype.setTimeSignature = function(timeSignature) {
+	for(var i = 0; i < this.staveList.length; i++){
+		this.staveList[i].setTimeSignature(timeSignature);
+	}
+	this.redraw();
+};
+
+Vex.UI.Handler.prototype.redraw = function(notesInserted){
 	this.ctx.clear();
 	this.drawStaves();
-	this.drawNotes();
+	if (notesInserted) {
+		this.drawNotes(undefined, true);
+	} else {
+		this.drawNotes();
+	}
 };
 
 Vex.UI.Handler.prototype.redrawStave = function(stave){
@@ -121,21 +132,25 @@ Vex.UI.Handler.prototype.redrawStave = function(stave){
 	// }
 
 	this.ctx.clearRect(box.getX() - 12, box.getY(), box.getW() * 1.5, box.getH() + 5);
-	this.drawStaves();
+	this.drawStaves(stave);
 	this.drawNotes(stave);
 };
 
-Vex.UI.Handler.prototype.drawStaves = function(){
-	for(var i = 0; i < this.staveList.length; i++){
-		this.staveList[i].draw();
+Vex.UI.Handler.prototype.drawStaves = function(stave){
+	if (stave) {
+		stave.draw();
+	} else {
+		for(var i = 0; i < this.staveList.length; i++){
+			this.staveList[i].draw();
+		}
 	}
 };
 
-Vex.UI.Handler.prototype.drawNotes = function(stave){
+Vex.UI.Handler.prototype.drawNotes = function(stave, notesInserted){
 	if(stave === undefined){
 		//Draw Notes on all staves
 		for(var i = 0; i < this.staveList.length; i++){
-			this.drawNotes(this.staveList[i]);
+			this.drawNotes(this.staveList[i], notesInserted);
 		}
 	} else {
 		//Draw notes on Stave passed as Arg
@@ -149,20 +164,26 @@ Vex.UI.Handler.prototype.drawNotes = function(stave){
 			formatter.joinVoices([voice]);
 			formatter.formatToStave([voice], stave);
 			voice.draw(this.ctx, stave);
-			this.drawBeams(stave);
+			if (notesInserted) {
+				this.drawBeams(stave, true);
+			} else {
+				this.drawBeams(stave);
+			}
 		}
 	}
 };
 
-Vex.UI.Handler.prototype.drawBeams = function(stave){
+Vex.UI.Handler.prototype.drawBeams = function(stave, notesInserted){
 	// for(var i = 0; i < stave.getBeams().length; i++){
 	// 	stave.getBeams()[i].setContext(this.ctx).draw();
 	// }
 	
-	var beams = Vex.Flow.Beam.generateBeams(stave.getTickables());
+	if (notesInserted || stave.beams == null) {
+		stave.beams = Vex.Flow.Beam.generateBeams(stave.getTickables());
+	}
 
-	for (var i = 0; i < beams.length; i ++) {
-		beams[i].setContext(this.ctx).draw();
+	for (var i = 0; i < stave.beams.length; i ++) {
+		stave.beams[i].setContext(this.ctx).draw();
 	}
 };
 

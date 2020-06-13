@@ -198,7 +198,7 @@ Vex.UI.MouseListener.prototype.handleLeftMouseClick = function(evt){
 			this.handler.currentStave.insertTickableBetween(newNote, previousNote, nextNote);
 			
 			//Redraw the stave
-			this.handler.redraw();
+			this.handler.redraw(true);
 			
 		} else{
 			//Case 2: clicked direclty into a note
