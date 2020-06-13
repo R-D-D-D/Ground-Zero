@@ -17,7 +17,7 @@ Vex.UI.Handler = function (containerId, options){
 		canAddStaves: true,
 		canChangeNoteValue: true,
 		showToolbar: true,
-		numberOfStaves: 2,
+		numberOfStaves: 4,
 		canvasProperties: {
 			id: containerId + "-canvas",
 			width: 1225,
@@ -71,19 +71,24 @@ Vex.UI.Handler.prototype.createStaves = function() {
 	var yPosition = 0;
 	for(var i = 0; i < this.options.numberOfStaves; i++){
 		//TODO make stave position more dinamic
-		var stave = new Vex.Flow.Stave(10, yPosition, 800);
+		var stave = {};
+		if ((i + 1) % 2 == 0) {
+			stave = new Vex.Flow.Stave(410, yPosition, 400);
+			yPosition += (stave.height * 1.2);
+		} else {
+			stave = new Vex.Flow.Stave(10, yPosition, 400);
+			stave.addClef("treble").addTimeSignature('4/4');
+		}
 		stave.font = {
       family: 'sans-serif',
       size: 12,
       weight: '',
 		};
-		stave.addClef("treble");
 		staveList.push(stave);
 		stave.setContext(this.ctx);
 		//Initially empty -> No Notes
 		//TODO make it able to load notes
 		stave.setTickables([]);
-		yPosition += (stave.height * 1.2);
 	}
 
 	return staveList;
@@ -99,16 +104,8 @@ Vex.UI.Handler.prototype.init = function() {
 		this.mouseListener.startListening();
 		// this.keyboardListener.startListening();
 	}
-	
 
 	return this;
-};
-
-Vex.UI.Handler.prototype.setTimeSignature = function(timeSignature) {
-	for(var i = 0; i < this.staveList.length; i++){
-		this.staveList[i].setTimeSignature(timeSignature);
-	}
-	this.redraw();
 };
 
 Vex.UI.Handler.prototype.redraw = function(notesInserted){
@@ -130,8 +127,12 @@ Vex.UI.Handler.prototype.redrawStave = function(stave){
 	// for(var i = 0; i < this.staveList.length; i++){
 	// 	this.drawNotes(this.staveList[i]);
 	// }
-
-	this.ctx.clearRect(box.getX() - 12, box.getY(), box.getW() * 1.5, box.getH() + 5);
+	var idx = this.staveList.indexOf(stave);
+	if ((idx + 1) % 2 == 0) {
+		this.ctx.clearRect(box.getX(), box.getY(), box.getW() + 15, box.getH() + 5);
+	} else {
+		this.ctx.clearRect(box.getX() - 15, box.getY(), box.getW() + 16, box.getH());
+	}
 	this.drawStaves(stave);
 	this.drawNotes(stave);
 };
@@ -402,5 +403,74 @@ Vex.UI.Handler.prototype.exportNotes = function() {
 		}
 	}
 	return result;
-}
+};
 
+Vex.UI.Handler.prototype.numBars = 4;
+Vex.UI.Handler.prototype.timeSignature = '4/4';
+
+Vex.UI.Handler.prototype.changeBars = function(newNumBars) {
+	//console.log("newBar", newNumBars);
+	if (newNumBars > this.numBars) {
+		for (var j = this.numBars; j < newNumBars; j ++) {
+			this.staveList[j].setTickables([]);
+			this.staveList[j].usable = true;
+		}
+		this.redraw();
+	} else if (newNumBars < this.numBars) {
+		var tickables = [];
+		var durationOfRest = this.timeSignature.split('/')[1] + 'r';
+		for (var i = 0; i < parseInt(this.timeSignature.split('/')[0]); i++) {
+			tickables.push(new Vex.Flow.StaveNote({clef: "treble", keys: ["b/4"], duration: durationOfRest }));
+		}
+		// loop through to fill up the empty bars with rest
+		for (var j = newNumBars; j < this.staveList.length; j ++) {
+			this.staveList[j].setTickables(tickables);
+			this.staveList[j].usable = false;
+		}
+		this.redraw();
+	} else {
+		// do nothing cuz no change
+	}
+
+	this.numBars = newNumBars;
+};
+
+Vex.UI.Handler.prototype.setTimeSignature = function(timeSignature) {
+	for(var i = 0; i < this.staveList.length; i++){
+		if ((i + 1) % 2 == 1) 
+			this.staveList[i].setTimeSignature(timeSignature);
+	}
+	this.timeSignature = timeSignature;
+	this.redraw();
+};
+
+Vex.UI.Handler.prototype.highlightNote = function(idx) {
+	console.log("called with", idx)
+	if (idx == 0) {
+		this.staveList[0].getTickables()[0].setHighlight(true);
+		this.redraw();
+	} else {
+		var currStave = 0;
+		var currNumNotes = this.staveList[currStave].getTickables().length;
+		while (idx > currNumNotes) {
+			idx -= currNumNotes;
+			currStave ++;
+			currNumNotes = this.staveList[currStave].getTickables().length;
+		}
+		if (currNumNotes > idx)
+			this.staveList[currStave].getTickables()[idx].setHighlight(true);
+			this.redraw();
+	}
+};
+
+// Vex.UI.Handler.prototype.disableEdit = function() {
+// 	for (var i = 0; i < this.staveList.length; i++) {
+// 		this.staveList[i].usable = false;
+// 	}
+// };
+
+// Vex.UI.Handler.prototype.enableEdit = function() {
+// 	for (var i = 0; i < this.staveList.length; i++) {
+// 		this.staveList[i].usable = true;
+// 	}
+// };

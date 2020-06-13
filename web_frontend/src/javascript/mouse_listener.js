@@ -47,31 +47,39 @@ Vex.UI.MouseListener.prototype.stopListening = function(){
 };
 
 Vex.UI.MouseListener.prototype.handleMouseLeave = function(evt){
-	for(var i = 0; i < this.staveList.length; i++){
-		this.handler.redrawStave(this.staveList[i]);
-	}
+	// console.log("in mouseleave")
+	// if(this.handler.currentNote != null){
+	// 	console.log(this.handler.currentNote);
+	// 	var idx = this.currentStave.getTickables().indexOf(this.handler.currentNote);
+	// 	this.handler.currentStave.getTickables()[idx].setHighlight(false);
+	// }
+	this.handler.redraw();
 }
 
 Vex.UI.MouseListener.prototype.handleMouseOver = function(evt){
 	var mousePos = getMousePositionInCanvas(this.canvas, evt);
-		var temp = findWhichStaveMouseOver(this.staveList, mousePos);
-		if (temp && this.handler.currentStave && temp != this.handler.currentStave) {
-			this.handler.redrawStave(this.handler.currentStave);
-		}
-		this.handler.currentStave = temp;
-    this.handler.currentNote = findWhichNoteMouseOver(this.handler.currentStave, mousePos);
-    this.handler.updateProvisoryKey(mousePos);
-    //change color of currentNote
-    if(this.handler.currentNote != null){
-    	this.handler.currentNote.setHighlight(true);
-    	this.handler.redraw();
-    }
+	var temp = findWhichStaveMouseOver(this.staveList, mousePos);
+	// if (this.handler.currentStave)
+	// 	console.log("current stave idx", this.staveList.indexOf(this.handler.currentStave));
+	// if (temp)
+	// 	console.log("next stave idx", this.staveList.indexOf(temp));
+	if (temp && this.handler.currentStave && temp != this.handler.currentStave) {
+		this.handler.redraw();
+	}
+	this.handler.currentStave = temp;
+	this.handler.currentNote = findWhichNoteMouseOver(this.handler.currentStave, mousePos);
+	this.handler.updateProvisoryKey(mousePos);
+	//change color of currentNote
+	if(this.handler.currentNote != null){
+		this.handler.currentNote.setHighlight(true);
+		this.handler.redraw();
+	}
     
 	//Private function
 	function findWhichStaveMouseOver(staveList, mousePos){
 		for(var i = 0; i < staveList.length; i++){
 			var box = staveList[i].getBoundingBox();
-			if(isCursorWithinRectangle(box.getX(), box.getY(), box.getW(), box.getH(), mousePos.x, mousePos.y))
+			if(isCursorWithinRectangle(box.getX(), box.getY(), box.getW(), box.getH(), mousePos.x, mousePos.y) && staveList[i].usable)
 				return staveList[i];
 		}
 		return null;
@@ -179,7 +187,7 @@ Vex.UI.MouseListener.prototype.handleMouseWheel = function(evt){
 };
 
 Vex.UI.MouseListener.prototype.handleLeftMouseClick = function(evt){
-	if(this.handler.currentStave!=null){
+	if(this.handler.currentStave!=null && this.handler.currentStave.usable){
 		//Find out the note representing the place clicked by the user
 		var mousePos = getMousePositionInCanvas(this.canvas, evt);
 		

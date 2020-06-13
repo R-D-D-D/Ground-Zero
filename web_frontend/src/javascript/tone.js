@@ -184,6 +184,7 @@ const tone = {
   player: null,
   started: false,
   initiated: false,
+  idx : 0,
 
   notesToEvents(notes) {
     var result = [];
@@ -238,25 +239,29 @@ const tone = {
     }
   },
 
-  playSequence(bpm, notes, numBars) {
-    this.createAndRecordSequence(bpm, notes, numBars, undefined, true);
+  playSequence(bpm, notes, numBars, handler) {
+    this.createAndRecordSequence(bpm, notes, numBars, undefined, true, handler);
   },
 
-  createAndRecordSequence(bpm, notes, numBars, audio, noRecord) {
+  createAndRecordSequence(bpm, notes, numBars, audio, noRecord, handler) {
+    // simple check to avoid double play
+    if (this.started || numBars == 0) return;
+    this.started = true;
+
     Tone.Transport.bpm.value = bpm;
     this.notesToEvents([])
-    // simple check to avoid double play
-    if (this.started) return;
-    this.started = true;
 
     Tone.Context.latencyHint = 'fastest';
     const part = new Tone.Part((time) => {
-      //the events will be given to the callback with the time they occur
-      this.poly.voices.forEach((v, i) => {
-        this.freqEnv[i].triggerAttackRelease('16n', time);
-        v.envelope.triggerAttackRelease('16n', time);
-      });
-      this.noise.triggerAttackRelease('16n', time);
+        //the events will be given to the callback with the time they occur
+        this.poly.voices.forEach((v, i) => {
+          this.freqEnv[i].triggerAttackRelease('16n', time);
+          v.envelope.triggerAttackRelease('16n', time);
+        });
+        this.noise.triggerAttackRelease('16n', time);
+        handler.highlightNote(this.idx);
+        this.idx ++;
+        console.log("idx", this.idx)
       }, this.notesToEvents(notes)
     );
 
@@ -297,7 +302,9 @@ const tone = {
         recorder.stop();
         console.log('stopped')
         Tone.Transport.stop();  
+        Tone.Transport.cancel(0);
         this.started = false;
+        this.idx = 0;
       }, totalNumBars);
   
       recorder.start();
@@ -306,7 +313,9 @@ const tone = {
       Tone.Transport.schedule((time) => {
         console.log('stopped')
         Tone.Transport.stop();  
+        Tone.Transport.cancel(0);
         this.started = false;
+        this.idx = 0;
       }, totalNumBars);
 
       Tone.Transport.start();

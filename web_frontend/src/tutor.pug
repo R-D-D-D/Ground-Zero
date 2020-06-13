@@ -17,8 +17,7 @@ vtemplate#v-tutor
           button.btn.btn-outline-dark.btn-lg(v-on:click="$emit('play_sequence')") Play Sequence
         .col-6.text-left.pl-5
           select.btn.btn-outline-dark.btn-lg(v-model="time_signature" v-on:change="$emit('change_time_signature')")
-            option(disabled selected) Time Signature
-            option 4/4
+            option(selected) 4/4
             option 3/4
             option 2/4
             option 6/8
@@ -32,7 +31,7 @@ vtemplate#v-tutor
           input.w-100(type="range" class="custom-range" min="60" max="180" v-model="bpm")
         .col-3.text-center
           p.m-0.text-dark No. Bars: {{ num_of_bars }}
-          input.w-100(type="range" class="custom-range" min="1" max="4" v-model="num_of_bars")
+          input.w-100(type="range" class="custom-range" min="0" max="4" v-model="num_of_bars" v-on:change="$emit('change_bars')")
   
 
 script.
@@ -40,7 +39,7 @@ script.
   comps.update('v-tutor', {
     data() {
       return {
-        time_signature: 'Time Signature',
+        time_signature: '4/4',
         handler: {},
         bpm: 60,
         num_of_bars: 4,
@@ -51,11 +50,18 @@ script.
 
       this.$on('play_sequence', () => {
         tone.init();
-        tone.playSequence(this.bpm, this.handler.exportNotes(), parseInt(this.num_of_bars) + 1);
+        //TODO disable edit when playing
+        //this.handler.disableEdit();
+        tone.playSequence(this.bpm, this.handler.exportNotes(), parseInt(this.num_of_bars) + 1, this.handler);
+        //this.handler.enableEdit();
       });
 
       this.$on('change_time_signature', () => {
         this.handler.setTimeSignature(this.time_signature);
+      });
+
+      this.$on('change_bars', () => {
+        this.handler.changeBars(this.num_of_bars);
       });
     }
   })
