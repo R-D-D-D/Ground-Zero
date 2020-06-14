@@ -109,14 +109,14 @@ Vex.UI.MouseListener.prototype.handleMouseOver = function(evt){
 
 
 Vex.UI.MouseListener.prototype.handleMouseClick = function(evt){
-	switch (evt.which) {
-    case 1:
+	switch (evt.button) {
+    case 0:
         this.handleLeftMouseClick(evt);
         break;
-    case 2:
+    case 1:
     	this.handleMiddleMouseClick(evt);
         break;
-    case 3:
+    case 2:
     	  //this.handleRightMouseClick(evt);
         break;
     default:

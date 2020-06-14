@@ -60,9 +60,25 @@ Vex.Flow.Stave.prototype.insertTickableBetween = function(newTickable, previousT
 			return;
 	}
 
-	if(nextTickable==null){
+	if (previousTickable) {
+		if (previousTickable.getModifiers('annotations')[0].text == "L") 
+			newTickable.addModifier(0, new Vex.Flow.Annotation('R'));
+		else 
+			newTickable.addModifier(0, new Vex.Flow.Annotation('L'));
+	} else {
+		if (nextTickable) {
+			if (nextTickable.getModifiers('annotations')[0].text == "L") 
+				newTickable.addModifier(0, new Vex.Flow.Annotation('R'));
+			else 
+				newTickable.addModifier(0, new Vex.Flow.Annotation('L'));
+		} else {
+				newTickable.addModifier(0, new Vex.Flow.Annotation('L'));
+		}
+	}
+
+	if (nextTickable==null) {
 			this.pushTickable(newTickable);
-	}else{
+	} else {
 		var referenceIndex = this.tickables.indexOf(nextTickable);
 		this.tickables.splice(referenceIndex, 0, newTickable);	
 	}
@@ -161,6 +177,8 @@ Vex.Flow.Stave.prototype.pushBeam = function(newBeam){
 Vex.Flow.StaveNote.prototype.indexOfKey = function(keyName){
 	return this.keys.indexOf(keyName);
 };
+
+Vex.Flow.StaveNote.prototype.letter = "R";
 
 
 Vex.Flow.StaveNote.prototype.getPlayEvents = function(playInfo){

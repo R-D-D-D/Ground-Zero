@@ -280,7 +280,6 @@ Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 				//TODO the -5 value shouldnt be absolute! it should reflect half the note's Width
 				this.provisoryTickable.x_shift= mousePos.x - this.provisoryTickable.getAbsoluteX() - 5;
 
-
 			}else if (this.provisoryTickable instanceof Vex.Flow.BarNote){// if(this.provisoryTickable instanceof Vex.Flow.BarNote){
 				const barline = new Vex.Flow.Barline(1);
 				// barline.setX(mousePos.x 
@@ -314,7 +313,6 @@ Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 
 		}	
 	}
-	
 	
 };
 

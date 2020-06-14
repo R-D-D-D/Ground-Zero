@@ -102,8 +102,8 @@ Vex.UI.NoteMenu.prototype.drawMenuPanel = function(mousePos) {
 		panelPosition = 'left';
 	}
 	
-	console.log("pannelY", panelY);
-	console.log("canvas height", canvas.height);
+	// console.log("pannelY", panelY);
+	// console.log("canvas height", canvas.height);
 	//Check if the panel fits in Y Axis
 	if((panelY + panelHeight) * Vex.UI.scale > canvas.height){
 		//Reposition panel Y to fit canvas
@@ -170,7 +170,7 @@ Vex.UI.NoteMenu.prototype.drawButtons = function(){
 };
 
 Vex.UI.NoteMenu.prototype.handleMouseClick = function(evt){
-	if(evt.which == 1){//Left Button
+	if(evt.button == 0){//Left Button
 		//get mouse position
 		var mousePos = getMousePositionInCanvas(this.canvas, evt);
 		
